@@ -2,46 +2,40 @@
 .Rhistory
 .Rapp.history
 
-# Session data
+# Session Data files
 .RData
 
-# User-specific files
-.Ruserdata
-
 # Example code in package build process
-*-Ex.R
+*.Rcheck/
 
 # Output files from R CMD build
 /*.tar.gz
 
 # Output files from R CMD check
-.Rcheck/
+/*.Rcheck/
 
 # RStudio files
-.Rproj.user/
-.Rproj.user
+.Rproj.user/*
 *.Rproj
 
-# R packages
-.Rpackrat/
-renv/library/
-renv/staging/
-packrat/lib/
-packrat/src/
+# Produced vignettes
+vignettes/*.html
+vignettes/*.pdf
 
-# Cache
-.Rcache
-.Rbuildignore
+# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
+.httr-oauth
 
-# Shiny temp files
-rsconnect/
-shinyapps/
+# knitr and R markdown default cache directories
+/*_cache/
+/cache/
 
-# Quarto / knitr
-_cache/
-*_cache/
+# Temporary files created by R markdown
 *.utf8.md
+*.knit.md
 
-# Others
-.DS_Store
-/.Rproj.user
+# R Environment Variables
+.Renviron
+.Rproj.user/5041C877/sources/prop/21CC71B1
+*.gif
+.Rproj.user
+rsconnect/shinyapps.io/nathanielmorley2000/refuginator.dcf
