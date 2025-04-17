@@ -1,0 +1,46 @@
+# History files
+.Rhistory
+.Rapp.history
+
+# Session data
+.RData
+
+# User-specific files
+.Ruserdata
+
+# Example code in package build process
+*-Ex.R
+
+# Output files from R CMD build
+/*.tar.gz
+
+# Output files from R CMD check
+.Rcheck/
+
+# RStudio files
+.Rproj.user/
+.Rproj.user
+*.Rproj
+
+# R packages
+.Rpackrat/
+renv/library/
+renv/staging/
+packrat/lib/
+packrat/src/
+
+# Cache
+.Rcache
+.Rbuildignore
+
+# Shiny temp files
+rsconnect/
+shinyapps/
+
+# Quarto / knitr
+_cache/
+*_cache/
+*.utf8.md
+
+# Others
+.DS_Store
