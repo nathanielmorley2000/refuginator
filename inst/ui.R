@@ -14,7 +14,7 @@ library("plotly")
 library("leaflet")
 library("neotoma2")
 library("viridis")
-# test
+
 
 # load custom functions from functions.R file
 source("R/functions.R")
