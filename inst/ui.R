@@ -14,16 +14,17 @@ library("plotly")
 library("leaflet")
 library("neotoma2")
 library("viridis")
+# test
 
 # load custom functions from functions.R file
 source("R/functions.R")
 
 # define user interface for Refuginator 3,000
 ui <- fluidPage(
-  
+
   # initialize js integration
   useShinyjs(),
-  
+
   # custom CSS using inline style to increase margins
   tags$style(HTML("
     #upload-data-tab {
@@ -32,14 +33,14 @@ ui <- fluidPage(
       margin-bottom: 20px;
     }
   ")),
-  
-  # app title 
+
+  # app title
   titlePanel("Refuginator"),
-  
+
   # create multiple tabs with different inputs and outputs
   tabsetPanel(
     id = "main_tabs",
-    
+
     #################### Background & Instructions ####################
     tabPanel(
       "Background & Instructions",  # Main tab
@@ -66,20 +67,20 @@ ui <- fluidPage(
       )
     ),
     ###################################################################
-    
+
     #################### upload file ####################
     tabPanel("Upload Data",
-             
+
              # assign ID for styling
              div(id = "upload-data-tab",
-               
+
                  # show usage policy
                  includeHTML("html/UsagePolicy.html"),
-                 
+
                  # checkbox for agreeing to terms
                  checkboxInput("agree", "I agree to the Usage Policy", value = FALSE),
                  tags$hr(),
-                 
+
                  # if checkbox clicked, show file upload
                  conditionalPanel(
                    condition = "input.agree == true",
@@ -99,7 +100,7 @@ ui <- fluidPage(
     #################### Neotoma Database ####################
     tabPanel("Neotoma Pollen Database",
              sidebarLayout(
-               
+
                # sidebar panel for search terms
                sidebarPanel(
                  h2("Search Neotoma"),
@@ -117,12 +118,12 @@ ui <- fluidPage(
                  numericInput("yearMax", "Beginning of Interval (ya)", value = 20000),
                  numericInput("yearMin", "End of Interval (ya)", value = 0),
                  numericInput("timeBin", "Time Bin", value = 500),
-                 selectInput("samplingProtocol", 
-                             "Sampling Protocol:", 
+                 selectInput("samplingProtocol",
+                             "Sampling Protocol:",
                              choices = c("Minimum", "Maximum")),
                  actionButton("neotomaSearch", "Search")
                ),
-               
+
                # main panel for displaying outputs
                mainPanel(
                  # sites preview
