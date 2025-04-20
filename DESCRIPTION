@@ -5,6 +5,6 @@ Authors@R: person(given = "Nathaniel", family = "Morley", email = "nathaniel.mor
 Description: A shiny-based web application for reconstructing organismal distributions and 
     identifying historical and geohistorical refugia using the methods recently 
     published by Morley et al. (2024, PNAS).
-License: What license is it under?
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
