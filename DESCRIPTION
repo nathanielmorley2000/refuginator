@@ -1,11 +1,10 @@
 Package: refuginator
-Type: Package
-Title: What the Package Does (Title Case)
+Title: An Interactive Tool for Identifying Refugia
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R: person(given = "Nathaniel", family = "Morley", email = "nathaniel.morley2000@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0009-0005-3816-1023"))
+Description: A shiny-based web application for reconstructing organismal distributions and 
+    identifying historical and geohistorical refugia using the methods recently 
+    published by Morley et al. (2024, PNAS).
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
