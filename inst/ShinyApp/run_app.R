@@ -1,3 +1,3 @@
 library("shiny")
 library("rsconnect")
-runApp("~/GitHub/refuginator/inst")
+runApp("~/GitHub/refuginator/inst/ShinyApp/")
