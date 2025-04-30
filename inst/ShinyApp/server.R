@@ -189,8 +189,6 @@ server <- function(input, output, session) {
     # define user inputs
     data = rawData()
 
-    #print(class(data))
-
     # remove siteid and datasetid columns, if present
     unwanted_columns = c("siteid", "datasetid")
     existing_columns = colnames(data)
@@ -343,8 +341,6 @@ server <- function(input, output, session) {
       nit = input$nit
       rawData = rawData()
 
-      #print(class(rawData))
-
       # remove siteid and datasetid columns, if present
       unwanted_columns = c("siteid", "datasetid")
       existing_columns = colnames(rawData)
@@ -412,7 +408,7 @@ server <- function(input, output, session) {
     # Set data_loaded to TRUE after successful processing
     data_loaded(TRUE)
 
-    print(mapdata)
+
     return(mapdata)
   })
 
@@ -461,8 +457,7 @@ server <- function(input, output, session) {
   observeEvent(input$play, {
     if (!rv$is_playing) {
       rv$is_playing <- TRUE
-      rv$timer <- reactiveTimer(2000, session)  # 1.5-second interval
-      print("Play button pressed. Timer started.")
+      rv$timer <- reactiveTimer(2000, session)  # 2-second interval
 
       # Create and assign the observer to rv$timer_obs
       rv$timer_obs <- observe({
@@ -474,13 +469,11 @@ server <- function(input, output, session) {
           req(df)
           time_levels <- levels(df$time)
           current_index <- rv$current_time
-          print(paste("Current time index:", current_index))
 
           # Increment the time index
           new_index <- (current_index %% length(time_levels)) + 1
           rv$current_time <- new_index
           updateSliderInput(session, "time_slider", value = new_index)
-          print(paste("Updated time index to:", new_index))
         })
       })
     }
@@ -490,7 +483,6 @@ server <- function(input, output, session) {
   observeEvent(input$pause, {
     if (rv$is_playing) {
       rv$is_playing <- FALSE
-      print("Pause button pressed. Timer stopped.")
       # Destroy the observer to stop the timer
       if (!is.null(rv$timer_obs)) {
         rv$timer_obs$destroy()
@@ -598,7 +590,6 @@ server <- function(input, output, session) {
         mutate(time = as.numeric(as.character(time)))
 
       timebins <- sort(unique(map_data$time))
-      print(timebins)
 
       # create base map
       base_map <- ggplot() +
@@ -632,7 +623,6 @@ server <- function(input, output, session) {
         ggtitle('Year: {frame_time}',
                 subtitle = 'Frame {frame} of {nframes}')
       num_years <- length(timebins)
-      print(num_years)
 
       # save map to www/ folder
       anim_save(file, animation = animate(map_with_animation,
