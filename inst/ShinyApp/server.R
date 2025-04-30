@@ -407,8 +407,6 @@ server <- function(input, output, session) {
 
     # Set data_loaded to TRUE after successful processing
     data_loaded(TRUE)
-
-
     return(mapdata)
   })
 
