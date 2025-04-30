@@ -1,50 +1,6 @@
 # define server logic for Refuginator 3,000
 server <- function(input, output, session) {
 
-  #################### Background & Instructions ####################
-  # Reactive value to store the currently selected section
-  selected_section <- reactiveVal("section1")
-
-  # Update reactive value when an action link is clicked
-  observeEvent(input$background, {
-    selected_section("background")
-  })
-
-  observeEvent(input$uploadData, {
-    selected_section("uploadData")
-  })
-
-  observeEvent(input$regionalAnalysis, {
-    selected_section("regionalAnalysis")
-  })
-
-  observeEvent(input$neotomaInstructions, {
-    selected_section("neotomaInstructions")
-  })
-
-  observeEvent(input$references, {
-    selected_section("references")
-  })
-
-  # Dynamically include the appropriate HTML file based on the selected section
-  output$html_content <- renderUI({
-    if (selected_section() == "background") {
-      includeHTML("html/refugiaBackground.html")
-    } else if (selected_section() == "uploadData") {
-      includeHTML("html/uploadData.html")
-    } else if (selected_section() == "regionalAnalysis") {
-      includeHTML("html/regionalAnalysis.html")
-    } else if (selected_section() == "neotomaInstructions") {
-      includeHTML("html/NeotomaInstructions.html")
-    } else if (selected_section() == "references") {
-      includeHTML("html/refugiaReferences.html")
-    } else {
-      includeHTML("html/refugiaBackground.html")
-    }
-  })
-  ###################################################################
-
-
   #################### Neotoma Database ####################
   sites <- observeEvent(input$neotomaSearch, {
     # check to make sure all fields are filled out

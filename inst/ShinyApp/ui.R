@@ -41,33 +41,6 @@ ui <- fluidPage(
   tabsetPanel(
     id = "main_tabs",
 
-    #################### Background & Instructions ####################
-    tabPanel(
-      "Background & Instructions",  # Main tab
-      sidebarLayout(
-        sidebarPanel(
-          h2("Sections"),
-          # Hyperlink-style subsections
-          actionLink("background", "What are Refugia?"),
-          br(),
-          actionLink("uploadData", "Upload Data"),
-          br(),
-          actionLink("regionalAnalysis", "Regional Analysis"),
-          br(),
-          actionLink("neotomaInstructions", "Neotoma Pollen Database"),
-          br(),
-          #actionLink("guidelines", "Usage Policy"),
-          #br(),
-          actionLink("references", "References")
-        ),
-        mainPanel(
-          # Dynamic UI that changes based on the subsection clicked
-          uiOutput("html_content")
-        )
-      )
-    ),
-    ###################################################################
-
     #################### upload file ####################
     tabPanel("Upload Data",
 
