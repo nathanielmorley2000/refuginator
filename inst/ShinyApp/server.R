@@ -1,6 +1,9 @@
 # define server logic for Refuginator 3,000
 server <- function(input, output, session) {
 
+  # define pipe operator for code
+  "%>%" <- dplyr::"%>%"
+
   #################### Neotoma Database ####################
   sites <- observeEvent(input$neotomaSearch, {
     # check to make sure all fields are filled out
@@ -257,18 +260,18 @@ server <- function(input, output, session) {
     summary_long <- transformedData()
 
     # create plot
-    p <- ggplot2:: ggplot(summary_long, aes(x = value, y = time, color = metric)) +
-      geom_path(linewidth = 1) +
-      labs(title = "Localities Data Over Time",
+    p <- ggplot2:: ggplot(summary_long, ggplot2::aes(x = value, y = time, color = metric)) +
+      ggplot2::geom_path(linewidth = 1) +
+      ggplot2::labs(title = "Localities Data Over Time",
            x = "Number of localities",
            y = "Time",
            color = "Metric") +
-      scale_y_reverse() +
-      theme_classic()
+      ggplot2::scale_y_reverse() +
+      ggplot2::theme_classic()
 
     # convert using plotly to make interactive
     plotly::ggplotly(p) %>%
-      layout(hovermode = "x")
+      plotly::layout(hovermode = "x")
   })
   ###################################
 
@@ -498,12 +501,12 @@ server <- function(input, output, session) {
 
       # Plot points onto base map
       map_with_data <- base_map +
-        ggplot2::geom_point(data = df_time, aes(x = long, y = lat, color = value, group = time), size = 10) +
+        ggplot2::geom_point(data = df_time, ggplot2::aes(x = long, y = lat, color = value, group = time), size = 10) +
         ggplot2::scale_size_continuous(guide = 'none') +
 
         # Set up a dual color scale: 0 values as white, others with viridis gradient
         ggplot2::scale_color_gradientn(
-          colors = c("white", viridis(256)),  # White for 0, viridis for others
+          colors = c("white", viridis::viridis(256)),  # White for 0, viridis for others
           values = scales::rescale(c(0, 1)),  # Ensure 0 is mapped to white
           limits = c(0, max(df$value, na.rm = TRUE)),  # Set limits starting from 0
           na.value = NA  # Ensure NA values are not plotted
@@ -516,7 +519,7 @@ server <- function(input, output, session) {
       # If there is no data (empty slice), just plot the base map and color legend
       map_with_data <- base_map +
         ggplot2::scale_color_gradientn(
-          colors = viridis(256),
+          colors = viridis::viridis(256),
           limits = c(0, 10),  # Arbitrary limits to ensure the color scale appears
           na.value = "white"
         ) +
@@ -558,12 +561,12 @@ server <- function(input, output, session) {
 
       # plot data onto base map with black points being n=0 and coloured points reflecting number of grains >1
       map_with_data <- base_map +
-        ggplot2::geom_point(data = map_data, aes(x = long, y = lat, color = value, group = time), size = 10) +
+        ggplot2::geom_point(data = map_data, ggplot2::aes(x = long, y = lat, color = value, group = time), size = 10) +
         ggplot2::scale_size_continuous(guide = 'none') +
 
         # Set up a dual color scale: 0 values as white, others with viridis gradient
         ggplot2::scale_color_gradientn(
-          colors = c("white", viridis(256)),  # White for 0, viridis for others
+          colors = c("white", viridis::viridis(256)),  # White for 0, viridis for others
           values = scales::rescale(c(0, 1)),  # Ensure 0 is mapped to white
           limits = c(0, max(map_data$value, na.rm = TRUE)),  # Set limits starting from 0
           na.value = NA  # Ensure NA values are not plotted
