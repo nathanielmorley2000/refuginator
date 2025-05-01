@@ -8,3 +8,19 @@ Description: A shiny-based web application for reconstructing organismal distrib
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    dplyr,
+    gganimate,
+    ggplot2,
+    gifski,
+    leaflet,
+    neotoma2,
+    plotly,
+    rnaturalearth,
+    rnaturalearthdata,
+    sf,
+    shiny,
+    shinycssloaders,
+    shinyjs,
+    tidyr,
+    viridis
