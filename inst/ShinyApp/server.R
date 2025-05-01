@@ -258,7 +258,7 @@ server <- function(input, output, session) {
 
     # create plot
     p <- ggplot(summary_long, aes(x = value, y = time, color = metric)) +
-      geom_path(size = 1) +
+      geom_path(linewidth = 1) +
       labs(title = "Localities Data Over Time",
            x = "Number of localities",
            y = "Time",
