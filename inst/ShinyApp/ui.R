@@ -1,6 +1,3 @@
-
-
-
 # load custom functions from functions.R file
 source("R/functions.R")
 
@@ -8,7 +5,7 @@ source("R/functions.R")
 ui <- fluidPage(
 
   # initialize js integration
-  useShinyjs(),
+  shinyjs::useShinyjs(),
 
   # custom CSS using inline style to increase margins
   tags$style(HTML("
@@ -92,7 +89,7 @@ ui <- fluidPage(
                  conditionalPanel(
                    condition = "input.neotomaSearch == true",
                    h2("Sites Preview:"),
-                   withSpinner(leafletOutput("sitePreview")),
+                   shinycssloaders::withSpinner(leaflet::leafletOutput("sitePreview")),
                    actionButton("proceed", "Proceed with Selection")
                  ),
                  tags$hr(),
@@ -100,7 +97,7 @@ ui <- fluidPage(
                  conditionalPanel(
                    condition = "input.proceed == true",
                    h2("Data Preview:"),
-                   withSpinner(tableOutput("neotomaTable")),
+                   shinycssloaders::withSpinner(tableOutput("neotomaTable")),
                    downloadButton("downloadNeotoma", "Download Data")
                  )
                )
