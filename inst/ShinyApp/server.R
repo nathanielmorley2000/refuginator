@@ -14,7 +14,7 @@ server <- function(input, output, session) {
         is.na(input$yearMin)) {
 
       # show a modal dialog if any input is missing
-      showModal(modalDialog(
+      shiny::showModal(modalDialog(
         title = "Input Error",
         "Please fill out all fields before proceeding.",
         easyClose = TRUE,
@@ -22,7 +22,7 @@ server <- function(input, output, session) {
       ))
 
       # add JavaScript to refresh the page after closing the error message
-      runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
+      shinyjs::runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
 
     } else {
       # define user inputs
@@ -32,13 +32,13 @@ server <- function(input, output, session) {
       ymax = input$ymax
 
       # create bounding box from user inputs to make Neotoma API call
-      bbox_coords = matrix(c(xmin, ymin,  # lower-left
+      bbox_coords = base::matrix(c(xmin, ymin,  # lower-left
                              xmax, ymin,  # lower-right
                              xmax, ymax,  # upper-right
                              xmin, ymax,  # upper-left
                              xmin, ymin), # close the polygon
                            ncol = 2, byrow = TRUE)
-      bbox_polygon = st_polygon(list(bbox_coords))
+      bbox_polygon = sf::st_polygon(list(bbox_coords))
 
 
       # allows error messages to be displayed if API call is unsuccessful
@@ -56,7 +56,7 @@ server <- function(input, output, session) {
 
         if (is.null(al_pollen) || length(al_pollen) == 0) {
           # If no sites are returned, show a modal with a specific message
-          showModal(modalDialog(
+          shiny::showModal(modalDialog(
             title = "No Sites Found",
             "No sites were found for the given coordinates. Try different coordinates.",
             easyClose = TRUE,
@@ -64,7 +64,7 @@ server <- function(input, output, session) {
           ))
 
           # add JavaScript to refresh the page after closing the error message
-          runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
+          shinyjs::runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
 
         } else {
           # preview selected sites on the dashboard and give the option of changing before downloading data
@@ -76,7 +76,7 @@ server <- function(input, output, session) {
         }
       }, error = function(e) {
         # If there is an error (e.g., connection fails), show a modal with the error message
-        showModal(modalDialog(
+        shiny::showModal(modalDialog(
           title = "API Connection Error",
           paste("Failed to connect to the Neotoma API. Check your internet connection or try again later."),
           easyClose = TRUE,
@@ -84,7 +84,7 @@ server <- function(input, output, session) {
         ))
 
         # add JavaScript to refresh the page after closing the error message
-        runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
+        shinyjs::runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
       })
 
       neotomaData <- observeEvent(input$proceed, {
@@ -148,7 +148,7 @@ server <- function(input, output, session) {
     # remove siteid and datasetid columns, if present
     unwanted_columns = c("siteid", "datasetid")
     existing_columns = colnames(data)
-    columns_to_remove = intersect(existing_columns, unwanted_columns)
+    columns_to_remove = dplyr::intersect(existing_columns, unwanted_columns)
     data = data %>%
       dplyr::select(-all_of(columns_to_remove))
 
@@ -156,7 +156,7 @@ server <- function(input, output, session) {
     expected_initial_columns <- c("sitename", "lat", "long")
     uploaded_columns <- colnames(data)
     if (!all(expected_initial_columns == uploaded_columns[1:3])) {
-      showModal(modalDialog(
+      shiny::showModal(modalDialog(
         title = "Error: Invalid Columns",
         "If using custom data, the first three columns must be 'sitename', 'lat', and 'long'.",
         easyClose = TRUE,
@@ -164,7 +164,7 @@ server <- function(input, output, session) {
       ))
 
       # add JavaScript to refresh the page after closing the error message
-      runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
+      shinyjs::runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
 
     } else {
 
@@ -177,7 +177,7 @@ server <- function(input, output, session) {
         if (control == TRUE) {
         # pivot to a long table that can be used for graphing
         data = data %>%
-          pivot_longer(cols = c(localities_with_data, localities_with_pollen),
+          tidyr::pivot_longer(cols = c(localities_with_data, localities_with_pollen),
                        names_to = "metric", values_to = "value")
         return(data)
         } else {
@@ -219,7 +219,7 @@ server <- function(input, output, session) {
                            ),
                            # Main panel for displaying outputs ----
                            mainPanel(
-                              withSpinner(plotlyOutput("dataPlot")),
+                              shinycssloaders::withSpinner(plotly::plotlyOutput("dataPlot")),
                               tags$hr(),
                               downloadButton("downloadAnimation", "Download Animation"),
                               #uiOutput("dataAnimation"),
@@ -251,13 +251,13 @@ server <- function(input, output, session) {
 
 
   ##### regional incidence plot #####
-  output$dataPlot <- renderPlotly({
+  output$dataPlot <- plotly::renderPlotly({
     # define necessary data
     req(transformedData())
     summary_long <- transformedData()
 
     # create plot
-    p <- ggplot(summary_long, aes(x = value, y = time, color = metric)) +
+    p <- ggplot2:: ggplot(summary_long, aes(x = value, y = time, color = metric)) +
       geom_path(linewidth = 1) +
       labs(title = "Localities Data Over Time",
            x = "Number of localities",
@@ -267,7 +267,7 @@ server <- function(input, output, session) {
       theme_classic()
 
     # convert using plotly to make interactive
-    ggplotly(p) %>%
+    plotly::ggplotly(p) %>%
       layout(hovermode = "x")
   })
   ###################################
@@ -282,7 +282,7 @@ server <- function(input, output, session) {
         is.na(input$nit)) {
 
       # show a modal dialog if any input is missing
-      showModal(modalDialog(
+      shiny::showModal(modalDialog(
         title = "Input Error",
         "Please fill out all fields before proceeding.",
         easyClose = TRUE,
@@ -300,7 +300,7 @@ server <- function(input, output, session) {
       # remove siteid and datasetid columns, if present
       unwanted_columns = c("siteid", "datasetid")
       existing_columns = colnames(rawData)
-      columns_to_remove = intersect(existing_columns, unwanted_columns)
+      columns_to_remove = dplyr::intersect(existing_columns, unwanted_columns)
       rawData <- rawData %>%
         dplyr::select(-all_of(columns_to_remove))
 
@@ -322,7 +322,7 @@ server <- function(input, output, session) {
 
   ##### site-specific animations #####
   # Load country boundaries
-  countries <- ne_countries(scale = "medium", returnclass = "sf")
+  countries <- rnaturalearth::ne_countries(scale = "medium", returnclass = "sf")
 
   # Validate required columns
   required_cols <- c("sitename", "lat", "long")
@@ -336,7 +336,7 @@ server <- function(input, output, session) {
     # remove siteid and datasetid columns, if present
     unwanted_columns = c("siteid", "datasetid")
     existing_columns = colnames(mapdata)
-    columns_to_remove = intersect(existing_columns, unwanted_columns)
+    columns_to_remove = dplyr::intersect(existing_columns, unwanted_columns)
     mapdata <- mapdata %>%
       dplyr::select(-all_of(columns_to_remove))
 
@@ -352,13 +352,13 @@ server <- function(input, output, session) {
 
     # transform data into a method that can
     mapdata <- mapdata %>%
-      pivot_longer(cols = all_of(time_cols),
+      tidyr::pivot_longer(cols = all_of(time_cols),
                    names_to = "time", values_to =
                      "value") %>%
-      drop_na(value) %>%
-      mutate(time = as.numeric(as.character(time))) %>%
-      mutate(time = factor(time, levels = sort(unique(time)))) %>%
-      mutate(value = as.numeric(value))
+      tidyr::drop_na(value) %>%
+      dplyr::mutate(time = as.numeric(as.character(time))) %>%
+      dplyr::mutate(time = factor(time, levels = sort(unique(time)))) %>%
+      dplyr::mutate(value = as.numeric(value))
 
 
     # Set data_loaded to TRUE after successful processing
@@ -401,7 +401,7 @@ server <- function(input, output, session) {
   output$plot_ui <- renderUI({
     if (!data_loaded()) {
       # Data is loading; show spinner
-      withSpinner(plotOutput("animated_plot", height = "700px"))
+      shinycssloaders::withSpinner(plotOutput("animated_plot", height = "700px"))
     } else {
       plotOutput("animated_plot", height = "700px")
     }
@@ -463,7 +463,7 @@ server <- function(input, output, session) {
 
   # further modify the bounding box so it can be placed on map
   expandedBBoxsfc <- reactive({
-    expanded_bbox_sfc <- st_as_sfc(expandedBBox())
+    expanded_bbox_sfc <- sf::st_as_sfc(expandedBBox())
     return(expanded_bbox_sfc)
   })
 
@@ -483,44 +483,44 @@ server <- function(input, output, session) {
       dplyr::filter(time == current_time)
 
     # Set up the base map
-    base_map <- ggplot() +
-      geom_sf(data = countries, fill = "lightgrey", color = "black") +  # Background countries
-      geom_sf(data = expanded_bbox_sfc, fill = NA, color = "black", lwd = 2) +  # Bounding box
-      coord_sf(xlim = c(expanded_bbox$xmin, expanded_bbox$xmax),
+    base_map <- ggplot2::ggplot() +
+      ggplot2::geom_sf(data = countries, fill = "lightgrey", color = "black") +  # Background countries
+      ggplot2::geom_sf(data = expanded_bbox_sfc, fill = NA, color = "black", lwd = 2) +  # Bounding box
+      ggplot2::coord_sf(xlim = c(expanded_bbox$xmin, expanded_bbox$xmax),
                ylim = c(expanded_bbox$ymin, expanded_bbox$ymax),
                expand = FALSE) +  # Zoom into bounding box
-      xlab("Longitude") +
-      ylab("Latitude") +
-      theme_minimal(base_size = 20)
+      ggplot2::xlab("Longitude") +
+      ggplot2::ylab("Latitude") +
+      ggplot2::theme_minimal(base_size = 20)
 
     # Check if there are any non-NA values for this time slice
     if (nrow(df_time) > 0) {
 
       # Plot points onto base map
       map_with_data <- base_map +
-        geom_point(data = df_time, aes(x = long, y = lat, color = value, group = time), size = 10) +
-        scale_size_continuous(guide = 'none') +
+        ggplot2::geom_point(data = df_time, aes(x = long, y = lat, color = value, group = time), size = 10) +
+        ggplot2::scale_size_continuous(guide = 'none') +
 
         # Set up a dual color scale: 0 values as white, others with viridis gradient
-        scale_color_gradientn(
+        ggplot2::scale_color_gradientn(
           colors = c("white", viridis(256)),  # White for 0, viridis for others
           values = scales::rescale(c(0, 1)),  # Ensure 0 is mapped to white
           limits = c(0, max(df$value, na.rm = TRUE)),  # Set limits starting from 0
           na.value = NA  # Ensure NA values are not plotted
         ) +
 
-        labs(title = paste("Geospatial Heat Map - Time:", current_time, "ya"),
+        ggplot2::labs(title = paste("Geospatial Heat Map - Time:", current_time, "ya"),
              color = "Abundance")
 
     } else {
       # If there is no data (empty slice), just plot the base map and color legend
       map_with_data <- base_map +
-        scale_color_gradientn(
+        ggplot2::scale_color_gradientn(
           colors = viridis(256),
           limits = c(0, 10),  # Arbitrary limits to ensure the color scale appears
           na.value = "white"
         ) +
-        labs(title = paste("Geospatial Heat Map - Time:", current_time, "ya"),
+        ggplot2::labs(title = paste("Geospatial Heat Map - Time:", current_time, "ya"),
              color = "Abundance")
     }
     return(map_with_data)
@@ -541,45 +541,45 @@ server <- function(input, output, session) {
       expanded_bbox_sfc <- expandedBBoxsfc()
 
       map_data <- map_data %>%
-        mutate(time = as.numeric(as.character(time)))
+        dplyr::mutate(time = as.numeric(as.character(time)))
 
       timebins <- sort(unique(map_data$time))
 
       # create base map
-      base_map <- ggplot() +
-        geom_sf(data = countries, fill = "lightgrey", color = "black") +  # Background countries
-        geom_sf(data = expanded_bbox_sfc, fill = NA, color = "black", lwd = 2) +  # Bounding box
-        coord_sf(xlim = c(expanded_bbox$xmin, expanded_bbox$xmax),
+      base_map <- ggplot2::ggplot() +
+        ggplot2::geom_sf(data = countries, fill = "lightgrey", color = "black") +  # Background countries
+        ggplot2::geom_sf(data = expanded_bbox_sfc, fill = NA, color = "black", lwd = 2) +  # Bounding box
+        ggplot2::coord_sf(xlim = c(expanded_bbox$xmin, expanded_bbox$xmax),
                  ylim = c(expanded_bbox$ymin, expanded_bbox$ymax),
                  expand = FALSE) +  # Zoom into bounding box
-        xlab("Longitude") +
-        ylab("Latitude")+
-        theme_minimal(base_size = 20)
+        ggplot2::xlab("Longitude") +
+        ggplot2::ylab("Latitude")+
+        ggplot2::theme_minimal(base_size = 20)
 
       # plot data onto base map with black points being n=0 and coloured points reflecting number of grains >1
       map_with_data <- base_map +
-        geom_point(data = map_data, aes(x = long, y = lat, color = value, group = time), size = 10) +
-        scale_size_continuous(guide = 'none') +
+        ggplot2::geom_point(data = map_data, aes(x = long, y = lat, color = value, group = time), size = 10) +
+        ggplot2::scale_size_continuous(guide = 'none') +
 
         # Set up a dual color scale: 0 values as white, others with viridis gradient
-        scale_color_gradientn(
+        ggplot2::scale_color_gradientn(
           colors = c("white", viridis(256)),  # White for 0, viridis for others
           values = scales::rescale(c(0, 1)),  # Ensure 0 is mapped to white
           limits = c(0, max(map_data$value, na.rm = TRUE)),  # Set limits starting from 0
           na.value = NA  # Ensure NA values are not plotted
         ) +
 
-        labs(color = "Abundance")
+        ggplot2::labs(color = "Abundance")
 
       # animate the map through time
       map_with_animation <- map_with_data +
-        transition_time(-time) +
-        ggtitle('Year: {frame_time}',
+        gganimate::transition_time(-time) +
+        ggplot2::ggtitle('Year: {frame_time}',
                 subtitle = 'Frame {frame} of {nframes}')
       num_years <- length(timebins)
 
       # save map to www/ folder
-      anim_save(file, animation = animate(map_with_animation,
+      gganimate::anim_save(file, animation = gganimate::animate(map_with_animation,
                                           nframes = num_years,
                                           fps = 1.5,
                                           width = 1600,
