@@ -1,19 +1,4 @@
-# load libraries
-library("dplyr")
-library("tidyr")
-library("ggplot2")
-library("gganimate")
-library("gifski")
-library("sf")
-library("rnaturalearth")
-library("rnaturalearthdata")
-library("shiny")
-library("shinyjs")
-library("shinycssloaders")
-library("plotly")
-library("leaflet")
-library("neotoma2")
-library("viridis")
+
 
 
 # load custom functions from functions.R file
