@@ -89,7 +89,7 @@ ui <- fluidPage(
                  conditionalPanel(
                    condition = "input.neotomaSearch == true",
                    h2("Sites Preview:"),
-                   shinycssloaders::withSpinner(leaflet::leafletOutput("sitePreview")),
+                   shinycssloaders::withSpinner(leaflet::leafletOutput("sitePreview"), type = 2),
                    actionButton("proceed", "Proceed with Selection")
                  ),
                  tags$hr(),
@@ -97,7 +97,7 @@ ui <- fluidPage(
                  conditionalPanel(
                    condition = "input.proceed == true",
                    h2("Data Preview:"),
-                   shinycssloaders::withSpinner(tableOutput("neotomaTable")),
+                   shinycssloaders::withSpinner(tableOutput("neotomaTable"), type = 2),
                    downloadButton("downloadNeotoma", "Download Data")
                  )
                )
