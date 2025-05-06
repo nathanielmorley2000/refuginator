@@ -225,7 +225,6 @@ server <- function(input, output, session) {
                               shinycssloaders::withSpinner(plotly::plotlyOutput("dataPlot"), type = 6),
                               tags$hr(),
                               downloadButton("downloadAnimation", "Download Animation"),
-                              #uiOutput("dataAnimation"),
                               uiOutput("plot_ui"),
                               actionButton("play", "Play Animation"),
                               actionButton("pause", "Pause Animation"),
