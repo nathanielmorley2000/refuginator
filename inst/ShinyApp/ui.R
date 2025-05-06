@@ -1,3 +1,22 @@
+# create function to limit scipen to 9999 (limit changed in later versions of R and hasn't been updated in all dependencies)
+safely_patch_options <- function() {
+  original_options <- base::options
+
+  unlockBinding("options", baseenv())
+  assign("options", function(..., .env = parent.frame()) {
+    args <- list(...)
+    if ("scipen" %in% names(args) && args$scipen > 9999) {
+      args$scipen <- 9999
+    }
+    do.call(original_options, args, envir = .env)
+  }, envir = baseenv())
+  lockBinding("options", baseenv())
+}
+
+# Apply the patch BEFORE loading packages
+safely_patch_options()
+
+
 # load custom functions from functions.R file
 source("R/functions.R")
 
