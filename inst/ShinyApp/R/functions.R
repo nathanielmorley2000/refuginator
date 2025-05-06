@@ -29,7 +29,7 @@ findNeotoma <- function(al_pollen, taxon, taxonReplace, timeBin, yearMin, yearMa
     dplyr::do(ensure_taxon_present(., taxon)) %>%
     dplyr::ungroup() %>%
     dplyr::filter(variablename == taxon) %>%
-    dplyr::elect(sitename, lat, long, siteid, datasetid, value, age)
+    dplyr::select(sitename, lat, long, siteid, datasetid, value, age)
 
   # create 500-yr time bins as a separate column
   timeCorrected = allSamp0 %>%
