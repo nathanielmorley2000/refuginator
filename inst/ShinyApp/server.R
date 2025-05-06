@@ -222,7 +222,7 @@ server <- function(input, output, session) {
                            ),
                            # Main panel for displaying outputs ----
                            mainPanel(
-                              shinycssloaders::withSpinner(plotly::plotlyOutput("dataPlot")),
+                              shinycssloaders::withSpinner(plotly::plotlyOutput("dataPlot"), type = 2),
                               tags$hr(),
                               downloadButton("downloadAnimation", "Download Animation"),
                               #uiOutput("dataAnimation"),
@@ -404,7 +404,7 @@ server <- function(input, output, session) {
   output$plot_ui <- renderUI({
     if (!data_loaded()) {
       # Data is loading; show spinner
-      shinycssloaders::withSpinner(plotOutput("animated_plot", height = "700px"))
+      shinycssloaders::withSpinner(plotOutput("animated_plot", height = "700px"), type = 2)
     } else {
       plotOutput("animated_plot", height = "700px")
     }
