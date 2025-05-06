@@ -35,7 +35,7 @@ server <- function(input, output, session) {
       ymax = input$ymax
 
       # create bounding box from user inputs to make Neotoma API call
-      bbox_coords = base::matrix(c(xmin, ymin,  # lower-left
+      bbox_coords = matrix(c(xmin, ymin,  # lower-left
                              xmax, ymin,  # lower-right
                              xmax, ymax,  # upper-right
                              xmin, ymax,  # upper-left
@@ -71,7 +71,7 @@ server <- function(input, output, session) {
 
         } else {
           # preview selected sites on the dashboard and give the option of changing before downloading data
-          output$sitePreview <- renderLeaflet({
+          output$sitePreview <- leaflet::renderLeaflet({
             neotoma2::plotLeaflet(al_pollen) %>%
               leaflet::addPolygons(map = .,
                                    data = bbox_polygon,
@@ -103,12 +103,12 @@ server <- function(input, output, session) {
         neotomaData <- findNeotoma(al_pollen, taxon, taxonReplace, timeBin, yearMin, yearMax, samplingProtocol)
 
         # displays output on dashboard
-        output$neotomaTable <- renderTable({
+        output$neotomaTable <- shiny::renderTable({
           neotomaData[1:10, 1:12]
         })
 
         # allows user to download data to their file directory
-        output$downloadNeotoma <- downloadHandler(
+        output$downloadNeotoma <- shiny::downloadHandler(
           filename = function() {
             paste("NeotomaData-", Sys.Date(), ".csv", sep = "")
           },
