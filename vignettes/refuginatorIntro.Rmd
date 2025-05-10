@@ -1,0 +1,19 @@
+---
+title: "Launching and Using the Refuginator"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Launching and Using the Refuginator}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(refuginator)
+```

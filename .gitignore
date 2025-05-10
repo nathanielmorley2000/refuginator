@@ -40,3 +40,4 @@ vignettes/*.pdf
 .Rproj.user
 rsconnect/shinyapps.io/nathanielmorley2000/refuginator.dcf
 /.Rproj.user/5041C877/sources
+inst/doc
