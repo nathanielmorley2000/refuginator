@@ -14,6 +14,33 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(refuginator)
+The Refuginator is a dashboard designed to facilitate the identification of historical and geohistorical refugia using the methods proposed by Morley et al. (2025). This vignette provides users a comprehensive walkthrough on how to launch and use the Refuginator dashboard using the `refuginator` package in R.
+
+## Sections
+
+*[Getting Started]
+
+
+## Getting Started
+
+Users can install the `refuginator` package from CRAN with the command:
+
+```{r, eval = FALSE}
+install.packages("refuginator")
 ```
+
+Once the package is installed, users can then launch the Refuginator dashboard by attaching the `refuginator` library and using the `launchRefuginator()` command:
+
+```{r, eval = FALSE}
+library(refuginator)
+launchRefuginator()
+```
+
+Or, if users prefer to attach the package directly in the function's namespace:
+
+```{r, eval = FALSE}
+refuginator::launchRefuginator()
+```
+
+
+## 
