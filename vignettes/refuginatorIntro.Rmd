@@ -22,7 +22,7 @@ The Refuginator is a dashboard designed to facilitate the identification of hist
 * [Upload Data]
 * [Regional Analysis]
   * [Localities Data Over Time]
-  * [Animated Heatmaps]
+  * [Geospatial Heat Map]
   * [Monte Carlo Analysis]
 * [Neotoma Pollen Database]
   * [Search Parameters]
@@ -76,15 +76,32 @@ After uploading the data, a button marked "Analyze" will appear. Clicking this b
 ## Regional Analysis
 ### Localities Data Over Time
 
-The first step in Morley et al. (2025)'s protocol is to look at presence data over time. In the top right-hand corner of the [Regional Analysis] tab should be a line plot with two lines. The red line, marked "localities_with_data," shows the the number of sites with data in the user's study area in a given time bin; the blue line, marked "localities_with_specimens," shows the number of sites where the user's taxon if interest is present. 
+The first step in Morley et al.'s (2025) protocol is to look at presence data over time. In the top right-hand corner of the [Regional Analysis] tab should be a line plot with two lines. The red line, marked "localities_with_data," shows the the number of sites with data in the user's study area in a given time bin; the blue line, marked "localities_with_specimens," shows the number of sites where the user's taxon if interest is present. 
 
 The regional presence plot is rendered with the `plotly` package, allowing users to interact with the plot using the toolbar on the upper right corner of the plot. By default, the "Compare data on hover" tool is selected, but we recommend that users click the "Show closest data on hover" tool. This allows users to see exactly how many sites are present at a given time.
 
 Users can also download the plot as a .png file using the "Download plot as a png" tool.
 
-### Animated Heatmaps
+### Geospatial Heat Map
+
+The second step in Morley et al.'s (2025) protocol is to examine an animated heat map to determine how taxon abundance changes site-to-site for the duration of the study interval. Scrolling down on the [Regional Analysis] tab should show a still heatmap of the oldest time interval in the study.
+
+Pressing the "Play Animation" button should start the animation, moving from the oldest time interval to the youngest time interval. The "Pause Animation" button should stop the animation. Once paused, users can use the "Select Time" bar to skip forward or backward in the sequence. 
+
+Users can press the "Download Animation" button if they want to save a .gif of their animated heatmap.
+
 
 ### Monte Carlo Analysis
+
+The final step in Morley et al.'s (2025) protocol is to perform a Monte Carlo analysis to identify whether there is a statistically significant decline and rebound in the taxon of interest's presence. To do this, users must input:
+
+* **Entry Presence.** The presence at which the localities with data and the localities with specimens begin to diverge.
+* **Decline Presence.** The maximum presence at which the the localities with specimen occurs during the decline interval. *e.g., If decline presence = 5, the presence would be 5 or less for the duration of the decline*
+* *Duration of Decline.* How many time bins the decline lasts before re-expanding past the decline presence.
+* *Number of Iterations.* How many iterations users want to run for the Monte Carlo analysis. Typically values of 10,000 or 100,000 are sufficient.
+
+After users press the "Calculate" button, the Refuginator will provide a realized p-value.
+
 
 ## Neotoma Pollen Database
 ### Search Parameters
