@@ -20,6 +20,10 @@ The Refuginator is a dashboard designed to facilitate the identification of hist
 
 * [Getting Started]
 * [Upload Data]
+* [Regional Analysis]
+  * [Regional Presence Plot]
+  * [Animated Heatmaps]
+  * [Monte Carlo Analysis]
 * [Neotoma Pollen Database]
 
 
@@ -65,5 +69,12 @@ An example of the formatting required for a custom geospatial dataset is shown b
 Data downloaded from the [Neotoma Pollen Database] feature of the Refuginator will contain two extra columns (“siteid” and “datasetid”) following the “sitename” column. These columns provide information for users to help fulfill the Neotoma Database’s Usage Policy. Spreadsheets with the “siteid” and “datasetid” column can be uploaded directly to the Refuginator for analysis. An example of the formatting required for a ready-to-use Neotoma dataset can be found below:
 
 After uploading the data, a button marked "Analyze" will appear. Clicking this button will launch a separate tab on the application where the analysis will take place.
+
+## Regional Analysis
+### Regional Presence Plot
+
+### Animated Heatmaps
+
+### Monte Carlo Analysis
 
 ## Neotoma Pollen Database
