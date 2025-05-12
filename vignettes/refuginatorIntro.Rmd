@@ -97,8 +97,8 @@ The final step in Morley et al.'s (2025) protocol is to perform a Monte Carlo an
 
 * **Entry Presence.** The presence at which the localities with data and the localities with specimens begin to diverge.
 * **Decline Presence.** The maximum presence at which the the localities with specimen occurs during the decline interval. *e.g., If decline presence = 5, the presence would be 5 or less for the duration of the decline*
-* *Duration of Decline.* How many time bins the decline lasts before re-expanding past the decline presence.
-* *Number of Iterations.* How many iterations users want to run for the Monte Carlo analysis. Typically values of 10,000 or 100,000 are sufficient.
+* **Duration of Decline.** How many time bins the decline lasts before re-expanding past the decline presence.
+* **Number of Iterations.** How many iterations users want to run for the Monte Carlo analysis. Typically values of 10,000 or 100,000 are sufficient.
 
 After users press the "Calculate" button, the Refuginator will provide a realized p-value.
 
