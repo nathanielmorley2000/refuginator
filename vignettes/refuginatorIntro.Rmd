@@ -58,7 +58,7 @@ Users can upload custom geospatial data as CSV files for regional analysis. The 
 * “long” – the longitude for the site
 *  Proceeding columns must be numerical dates and should increase in regular increments (e.g., 0, 500, 1000, 1500). 
 
-Each entry should show the number of pollen grains for the user's taxon of interest in a given locality for the corresponding time interval. Entries for which data are unavailable should be left blank; entries for which data are available but lack pollen from the user's taxon of interest should be marked as "0."
+Each entry should show the number of specimens for the user's taxon of interest in a given locality for the corresponding time interval. Entries for which data are unavailable should be left blank; entries for which data are available but lack examples of the user's taxon of interest should be marked as "0."
 
 An example of the formatting required for a custom geospatial dataset is shown below:
 
