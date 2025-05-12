@@ -28,6 +28,7 @@ The Refuginator is a dashboard designed to facilitate the identification of hist
   * [Search Parameters]
   * [Interface Instructions]
   * [Neotoma Usage Policy]
+* [References]
 
 
 ## Getting Started
@@ -121,3 +122,10 @@ If the user proceeds with the selection, the dashboard will download the data fo
 ### Neotoma Usage Policy
 
 The Neotoma Paleoecology Database (Williams, Grimm et al., 2018) is licensed under a CC BY 4.0 license. Users are free to use data from the Neotoma database, including from the Neotoma Pollen Database functionality of this dashboard, provided they abide by Neotoma's data use and embargo policy. The creators of the Refuginator dashboard will not be held responsible for any violations or abuses of this policy.
+
+
+## References
+
+Morley, N. E. D., Schneider, C. L., Cahill Jr., J. F., Sullivan, C., Leighton, L. R. (2025). Ice age refugium shows potential of geohistorical data to guide modern conservation efforts. *Proceedings of the National Academy of Sciences of the United States of America.* [Submitted]. 
+
+Williams, J. W., Grimm, E. C., Blois, J. L., Charles, D. F., Davis, E. B., Goring, S. J., Graham, R. W., Smith, A. J., Anderson, M., Arroyo-Cabrales, J., Ashworth, A. C., Betancourt, J. L., Bills, B. W., Booth, R. K., Buckland, P. I., Curry, B. B., Giesecke, T., Jackson, S. T., Latorre, C., … Takahara, H. (2018). The Neotoma Paleoecology Database, a multiproxy, international, community-curated data resource. *Quaternary Research*, 89(1), 156–177. https://doi.org/10.1017/qua.2017.105
