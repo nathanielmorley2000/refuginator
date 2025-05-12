@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-The Refuginator is a dashboard designed to facilitate the identification of historical and geohistorical refugia using the methods proposed by Morley et al. (2025). This vignette provides users a comprehensive walkthrough on how to launch and use the Refuginator dashboard using the `refuginator` package in R.
+The Refuginator is a dashboard designed to facilitate the identification of historical and geohistorical refugia using the methods proposed by Morley et al. (2025). This vignette provides users a comprehensive walkthrough on how to launch and use the Refuginator dashboard using the `refuginator` package in `R`.
 
 ## Sections
 
@@ -85,9 +85,9 @@ After uploading the data, a button marked "Analyze" will appear. Clicking this b
 
 To extract data from the Neotoma database, users are required to enter the following search parameters:
 
-* Coordinates. The algorithm will search for pollen cores within a bounding box defined by the coordinates parameters. The Western Longitude and Eastern Longitude define the longitudinal axis, while the Southern Latitude and Northern Latitude define the latitudinal axis.
-* Taxon of Interest. The algorithm will filter data from select cores to only include pollen data based on the user's taxon of interest. When searching for the user's desired taxon, the dashboard will collapse any lower-level taxa into the user's taxon of interest. (e.g., If a user searches for the genus Picea, any species-level results within that search term, such as Picea glauca or Picea mariana, will be lumped together). It is generally recommended that searches are limited to the generic level (see Morley et al., 2024).
-* Time Parameters. The algorithm will sort pollen data into the selected time parameters. The Beginning of Interval defines the start of the study interval, while the End of Interval defines the end of the study interval. Both of these values should be written in units of ya, or "years ago." (e.g., A study interval of 20 ka–Present would be input as "Beginning of Interval = 20000" and "End of Interval = 0"). The Time Bin parameter defines to the temporal resolution of the study (e.g., one datapoint for every 500 years). The Sampling Protocol defines how the data are sorted into time bins: the "Minimum" selects the lowest abundance in the time bin as the representative datapoint, while the "Maximum" selects the greatest abundance in the time bin as the representative datapoint (see Morley et al., 2024 for more information on these two protocols).
+* **Coordinates.** The algorithm will search for pollen cores within a bounding box defined by the coordinates parameters. The Western Longitude and Eastern Longitude define the longitudinal axis, while the Southern Latitude and Northern Latitude define the latitudinal axis.
+* **Taxon of Interest.** The algorithm will filter data from select cores to only include pollen data based on the user's taxon of interest. When searching for the user's desired taxon, the dashboard will collapse any lower-level taxa into the user's taxon of interest. (e.g., If a user searches for the genus Picea, any species-level results within that search term, such as Picea glauca or Picea mariana, will be lumped together). It is generally recommended that searches are limited to the generic level (see Morley et al., 2024).
+* **Time Parameters.** The algorithm will sort pollen data into the selected time parameters. The Beginning of Interval defines the start of the study interval, while the End of Interval defines the end of the study interval. Both of these values should be written in units of ya, or "years ago." (e.g., A study interval of 20 ka–Present would be input as "Beginning of Interval = 20000" and "End of Interval = 0"). The Time Bin parameter defines to the temporal resolution of the study (e.g., one datapoint for every 500 years). The Sampling Protocol defines how the data are sorted into time bins: the "Minimum" selects the lowest abundance in the time bin as the representative datapoint, while the "Maximum" selects the greatest abundance in the time bin as the representative datapoint (see Morley et al., 2024 for more information on these two protocols).
 
 ### Interface Instructions
 
