@@ -21,7 +21,7 @@ The Refuginator is a dashboard designed to facilitate the identification of hist
 * [Getting Started]
 * [Upload Data]
 * [Regional Analysis]
-  * [Regional Presence Plot]
+  * [Localities Data Over Time]
   * [Animated Heatmaps]
   * [Monte Carlo Analysis]
 * [Neotoma Pollen Database]
@@ -74,7 +74,13 @@ Data downloaded from the [Neotoma Pollen Database] feature of the Refuginator wi
 After uploading the data, a button marked "Analyze" will appear. Clicking this button will launch a separate tab on the application where the analysis will take place.
 
 ## Regional Analysis
-### Regional Presence Plot
+### Localities Data Over Time
+
+The first step in Morley et al. (2025)'s protocol is to look at presence data over time. In the top right-hand corner of the [Regional Analysis] tab should be a line plot with two lines. The red line, marked "localities_with_data," shows the the number of sites with data in the user's study area in a given time bin; the blue line, marked "localities_with_specimens," shows the number of sites where the user's taxon if interest is present. 
+
+The regional presence plot is rendered with the `plotly` package, allowing users to interact with the plot using the toolbar on the upper right corner of the plot. By default, the "Compare data on hover" tool is selected, but we recommend that users click the "Show closest data on hover" tool. This allows users to see exactly how many sites are present at a given time.
+
+Users can also download the plot as a .png file using the "Download plot as a png" tool.
 
 ### Animated Heatmaps
 
