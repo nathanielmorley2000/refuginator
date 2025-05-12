@@ -18,7 +18,9 @@ The Refuginator is a dashboard designed to facilitate the identification of hist
 
 ## Sections
 
-*[Getting Started]
+* [Getting Started]
+* [Upload Data]
+* [Neotoma Pollen Database]
 
 
 ## Getting Started
@@ -29,7 +31,7 @@ Users can install the `refuginator` package from CRAN with the command:
 install.packages("refuginator")
 ```
 
-Once the package is installed, users can then launch the Refuginator dashboard by attaching the `refuginator` library and using the `launchRefuginator()` command:
+Once the package is installed, users can then launch the Refuginator dashboard by attaching the `refuginator` package and using the `launchRefuginator()` command:
 
 ```{r, eval = FALSE}
 library(refuginator)
@@ -43,4 +45,25 @@ refuginator::launchRefuginator()
 ```
 
 
-## 
+## Upload Data
+
+Upon launching the dashboard, users will be directed to the "Upload Data" tab. This page shows users the usage policy for the Refuginator and explains the correct attribution for this application.
+
+After agreeing to the usage policy, a button will appear that allows users to upload their dataset:
+
+Users can upload custom geospatial data as CSV files for regional analysis. The spreadsheets must be formatted to contain the following columns:
+
+* “sitename” – the name of the site
+* “lat” – the latitude for the site
+* “long” – the longitude for the site
+*  Proceeding columns must be numerical dates and should increase in regular increments (e.g., 0, 500, 1000, 1500). 
+
+Each entry should show the number of pollen grains for the user's taxon of interest in a given locality for the corresponding time interval. Entries for which data are unavailable should be left blank; entries for which data are available but lack pollen from the user's taxon of interest should be marked as "0."
+
+An example of the formatting required for a custom geospatial dataset is shown below:
+
+Data downloaded from the [Neotoma Pollen Database] feature of the Refuginator will contain two extra columns (“siteid” and “datasetid”) following the “sitename” column. These columns provide information for users to help fulfill the Neotoma Database’s Usage Policy. Spreadsheets with the “siteid” and “datasetid” column can be uploaded directly to the Refuginator for analysis. An example of the formatting required for a ready-to-use Neotoma dataset can be found below:
+
+After uploading the data, a button marked "Analyze" will appear. Clicking this button will launch a separate tab on the application where the analysis will take place.
+
+## Neotoma Pollen Database
