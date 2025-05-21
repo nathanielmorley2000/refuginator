@@ -26,6 +26,18 @@ ui <- fluidPage(
   # initialize js integration
   shinyjs::useShinyjs(),
 
+  # app title for head ---
+  tags$head(HTML("<title>Identify Geohistorical Refugia with Refuginator</title>")),
+
+  # app title
+  titlePanel(h1("Refuginator",
+  style={'background-color : #000000;
+  margin-top : -20px;
+  margin-left: -15px;
+  margin-right: -15px;
+  padding-left: 20px;
+	color : #ffffff;'})),
+
   # custom CSS using inline style to increase margins
   tags$style(HTML("
     #upload-data-tab {
@@ -35,8 +47,6 @@ ui <- fluidPage(
     }
   ")),
 
-  # app title
-  titlePanel("Refuginator"),
 
   # create multiple tabs with different inputs and outputs
   tabsetPanel(
