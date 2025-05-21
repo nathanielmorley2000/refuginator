@@ -1,6 +1,22 @@
 # define pipe operator for code
 "%>%" <- dplyr::"%>%"
 
+# create function to limit scipen to 9999 (limit changed in later versions of R and hasn't been updated in all dependencies)
+safely_patch_options <- function() {
+  original_options <- base::options
+
+  unlockBinding("options", baseenv())
+  assign("options", function(..., .env = parent.frame()) {
+    args <- list(...)
+    if ("scipen" %in% names(args) && args$scipen > 9999) {
+      args$scipen <- 9999
+    }
+    do.call(original_options, args, envir = .env)
+  }, envir = baseenv())
+  lockBinding("options", baseenv())
+}
+
+
 findNeotoma <- function(al_pollen, taxon, taxonReplace, timeBin, yearMin, yearMax, samplingProtocol) {
   # download dataset -- may take some time
   al_dl = al_pollen %>% neotoma2::get_downloads(all_data = TRUE)
