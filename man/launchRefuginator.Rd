@@ -4,10 +4,10 @@
 \alias{launchRefuginator}
 \title{Launch the Refuginator Application in your Browser}
 \usage{
-launchRefuginator(inbrowser = TRUE)
+launchRefuginator(defaultbrowser = TRUE)
 }
 \arguments{
-\item{inbrowser}{Choose whether to launch the application in your default browser.}
+\item{defaultbrowser}{Choose whether to launch the application in your default browser.}
 }
 \value{
 Launches Refuginator application in your browser. All features are contained within the application.
@@ -17,5 +17,5 @@ Launch the Refuginator Application in your Browser
 }
 \examples{
 launchRefuginator()
-launchRefuginator(inbrowser = TRUE)
+launchRefuginator(defaultbrowser = TRUE)
 }
