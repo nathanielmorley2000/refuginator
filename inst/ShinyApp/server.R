@@ -222,13 +222,15 @@ server <- function(input, output, session) {
                            ),
                            # Main panel for displaying outputs ----
                            mainPanel(
+                              h2("Regional Presence Plot"),
                               shinycssloaders::withSpinner(plotly::plotlyOutput("dataPlot"), type = 6),
                               tags$hr(),
-                              downloadButton("downloadAnimation", "Download Animation"),
+                              h2("Animated Heat Map"),
                               uiOutput("plot_ui"),
                               actionButton("play", "Play Animation"),
                               actionButton("pause", "Pause Animation"),
-                              uiOutput("time_slider_ui")
+                              uiOutput("time_slider_ui"),
+                              downloadButton("downloadAnimation", "Download Animation")
 
                            ))),
                 ###########################################################
