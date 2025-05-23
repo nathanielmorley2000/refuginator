@@ -33,42 +33,42 @@ The Refuginator is a dashboard designed to facilitate the identification of hist
 
 ## Getting Started
 
-Users can install the `refuginator` package from CRAN with the command:
-
+Users can install the `refuginator` package from CRAN with the command:\
+\
 ```{r, eval = FALSE}
 install.packages("refuginator")
 ```
-
-Once the package is installed, users can then launch the Refuginator dashboard by attaching the `refuginator` package and using the `launchRefuginator()` command:
-
+\
+Once the package is installed, users can then launch the Refuginator dashboard by attaching the `refuginator` package and using the `launchRefuginator()` command:\
+\
 ```{r, eval = FALSE}
 library(refuginator)
 launchRefuginator()
 ```
-
-Or, if users prefer to attach the package directly in the function's namespace:
-
+\
+Or, if users prefer to attach the package directly in the function's namespace:\
+\
 ```{r, eval = FALSE}
 refuginator::launchRefuginator()
 ```
-
+\
 
 ## Upload Data
 
-Upon launching the dashboard, users will be directed to the "Upload Data" tab. This page shows users the usage policy for the Refuginator and explains the correct attribution for this application.
-
+Upon launching the dashboard, users will be directed to the "Upload Data" tab. This page shows users the usage policy for the Refuginator and explains the correct attribution for this application.\
+\
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig01_LandingPage.png")
 cap = "**Figure 1**. Refuginator landing page."
 ```
-
-After agreeing to the usage policy, a button will appear that allows users to upload their dataset:
-
+\
+After agreeing to the usage policy, a button will appear that allows users to upload their dataset:\
+\
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig02_UploadData.png")
 cap = "**Figure 2**. Agreeing to the Usage Policy allows users to upload their data."
 ```
-
+\
 Users can upload custom geospatial data as CSV files for regional analysis. The spreadsheets must be formatted to contain the following columns:
 
 * *sitename* – the name of the site
@@ -76,29 +76,29 @@ Users can upload custom geospatial data as CSV files for regional analysis. The 
 * *long* – the longitude for the site
 *  Proceeding columns must be numerical dates and should increase in regular increments (e.g., 0, 500, 1000, 1500). 
 
-Each entry should show the number of specimens for the user's taxon of interest in a given locality for the corresponding time interval. Entries for which data are unavailable should be left blank; entries for which data are available but lack examples of the user's taxon of interest should be marked as "0."
-
-An example of the formatting required for a custom geospatial dataset is shown below:
-
+Each entry should show the number of specimens for the user's taxon of interest in a given locality for the corresponding time interval. Entries for which data are unavailable should be left blank; entries for which data are available but lack examples of the user's taxon of interest should be marked as "0."\
+\
+An example of the formatting required for a custom geospatial dataset is shown below:\
+\
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig03_DataExampleNoID.png")
 cap = "**Figure 3**. Example dataset with the *sitename*, *latitude*, and *longitude* columns."
 ```
-
-Data downloaded from the [Neotoma Pollen Database] feature of the Refuginator will contain two extra columns (*siteid* and *datasetid*) following the *sitename* column. These columns provide information for users to help fulfill the Neotoma Database’s Usage Policy. Spreadsheets with the *siteid* and *datasetid* column can be uploaded directly to the Refuginator for analysis. An example of the formatting required for a ready-to-use Neotoma dataset can be found below:
-
+\
+Data downloaded from the [Neotoma Pollen Database] feature of the Refuginator will contain two extra columns (*siteid* and *datasetid*) following the *sitename* column. These columns provide information for users to help fulfill the Neotoma Database’s Usage Policy. Spreadsheets with the *siteid* and *datasetid* column can be uploaded directly to the Refuginator for analysis. An example of the formatting required for a ready-to-use Neotoma dataset can be found below:\
+\
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig04_DataExampleWithID.png")
 cap = "**Figure 4**. Example dataset including the *siteid* and *datasetid* columns."
 ```
-
-After uploading the data, a button marked "Analyze" will appear. Clicking this button will launch a separate tab on the application where the analysis will take place.
-
+\
+After uploading the data, a button marked "Analyze" will appear. Clicking this button will launch a separate tab on the application where the analysis will take place.\
+\
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig05_AnalyzeButton.png")
 cap = "**Figure 5**. Once the data is uploaded, the Analyze button will appear."
 ```
-
+\
 
 ## Regional Analysis
 
@@ -106,37 +106,39 @@ After clicking the "Analyze" button on the [Upload Data] tab, users will be dire
 
 ### Regional Presence Plot
 
-At the top of the main panel in the [Regional Analysis] section is the Regional Presence Plot. The red line, marked "localities_with_data," shows the the number of sites with data in the user's study area in a given time bin; the blue line, marked "localities_with_specimens," shows the number of sites where the user's taxon if interest is present.
-
+At the top of the main panel in the [Regional Analysis] section is the Regional Presence Plot. The red line, marked "localities_with_data," shows the the number of sites with data in the user's study area in a given time bin; the blue line, marked "localities_with_specimens," shows the number of sites where the user's taxon if interest is present.\
+\
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig06_RegionalPresencePlot.png")
 cap = "**Figure 6**. At the top of the main panel in the Regional Analysis tab is the Regional Presence Plot."
 ```
-
-The regional presence plot is rendered with the `plotly` package, allowing users to interact with the plot using the toolbar on the upper right corner of the plot. By default, the "Compare data on hover" tool is selected, but I recommend that users click the "Show closest data on hover" tool. This allows users to see exactly how many sites have their taxon present at a given time.
-
+\
+The regional presence plot is rendered with the `plotly` package, allowing users to interact with the plot using the toolbar on the upper right corner of the plot. By default, the "Compare data on hover" tool is selected, but I recommend that users click the "Show closest data on hover" tool. This allows users to see exactly how many sites have their taxon present at a given time.\
+\
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig07_DataInteraction.png")
 cap = "**Figure 7**. Users can interact with the data using the toolbar in the upper right corner of the plot."
 ```
-
-Users can also download the plot as a .png file using the "Download plot as a png" tool.
+\
+Users can also download the plot as a .png file using the "Download plot as a png" tool.\
+\
 
 ### Geospatial Heat Map
 
-At the bottom of the main panel in the [Regional Analysis] section is the Animated Heat Map. This animation shows how taxon abundance changes through time from site-to-site.
-
+At the bottom of the main panel in the [Regional Analysis] section is the Animated Heat Map. This animation shows how taxon abundance changes through time from site-to-site.\
+\
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig08_AnimatedHeatMap.png")
 cap = "**Figure 8**. At the bottom of the main panel in the Regional Analysis tab is Animated Heat Map."
 ```
-
-Pressing the "Play Animation" button should start the animation, moving from the oldest time interval to the youngest time interval. The "Pause Animation" button should stop the animation. Once paused, users can use the "Select Time" bar to skip forward or backward in the sequence. Users can press the "Download Animation" button if they want to save a .gif of their animated heatmap.
-
+\
+Pressing the "Play Animation" button should start the animation, moving from the oldest time interval to the youngest time interval. The "Pause Animation" button should stop the animation. Once paused, users can use the "Select Time" bar to skip forward or backward in the sequence. Users can press the "Download Animation" button if they want to save a .gif of their animated heatmap.\
+\
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig09_HeatMapInteractions.png")
 cap = "**Figure 9**. The buttons beneath the heat map allow the user to interact with it."
 ```
+\
 
 ### Monte Carlo Analysis
 
@@ -145,24 +147,25 @@ The sidebar on the [Regional Analysis] tab contains the inputs and outputs for t
 * **Entry Presence.** The presence at which the localities with data and the localities with specimens begin to diverge.
 * **Decline Presence.** The maximum presence at which the the localities with specimen occurs during the decline interval. *e.g., If decline presence = 5, the presence would be 5 or less for the duration of the decline*
 * **Duration of Decline.** How many time bins the decline lasts before re-expanding past the decline presence.
-* **Number of Iterations.** How many iterations users want to run for the Monte Carlo analysis. Typically values of 10,000 or 100,000 are sufficient.
-
+* **Number of Iterations.** How many iterations users want to run for the Monte Carlo analysis. Typically values of 10,000 or 100,000 are sufficient.\
+\
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig10_MonteCarloSidebar.png")
 cap = "**Figure 10**. The sidebar of the Regional Analysis tab contains the inputs for the Monte Carlo Analysis."
 ```
-
-After users press the "Calculate" button, the Refuginator will provide a realized p-value.
-
+\
+After users press the "Calculate" button, the Refuginator will provide a realized p-value.\
+\
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig11_PValue.png")
 cap = "**Figure 11**. After inputting all of the values, clicking the Calculate button will show the realized p-value."
 ```
+\
 
 ## Neotoma Pollen Database
 ### Search Parameters
 
-To extract data from the Neotoma database, users are required to enter the following search parameters:
+To extract data from the Neotoma database, users are required to enter the following search parameters into the sidebar:
 
 * **Coordinates.** The algorithm will search for pollen cores within a bounding box defined by the coordinates parameters. The Western Longitude and Eastern Longitude define the longitudinal axis, while the Southern Latitude and Northern Latitude define the latitudinal axis.
 * **Taxon of Interest.** The algorithm will filter data from select cores to only include pollen data based on the user's taxon of interest. When searching for the user's desired taxon, the dashboard will collapse any lower-level taxa into the user's taxon of interest. (e.g., If a user searches for the genus Picea, any species-level results within that search term, such as Picea glauca or Picea mariana, will be lumped together). It is generally recommended that searches are limited to the generic level (see Morley et al., 2024).
