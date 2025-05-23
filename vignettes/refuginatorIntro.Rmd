@@ -163,23 +163,46 @@ cap = "**Figure 11**. After inputting all of the values, clicking the Calculate 
 \
 
 ## Neotoma Pollen Database
+
+If users navigate to the [Neotoma Pollen Database] tab, they will be able to preview and extract pollen core data from the online Neotoma database (Williams, Grimm, et al. 2018) using the `neotoma2` package.\
+\
+```{r echo=FALSE, out.width = "90%", fig.cap = cap}
+knitr::include_graphics("Figures/Fig12_NeotomaTab.png")
+cap = "**Figure 12**. Default Neotoma Pollen Database tab"
+```
+\
+
 ### Search Parameters
 
 To extract data from the Neotoma database, users are required to enter the following search parameters into the sidebar:
 
-* **Coordinates.** The algorithm will search for pollen cores within a bounding box defined by the coordinates parameters. The Western Longitude and Eastern Longitude define the longitudinal axis, while the Southern Latitude and Northern Latitude define the latitudinal axis.
-* **Taxon of Interest.** The algorithm will filter data from select cores to only include pollen data based on the user's taxon of interest. When searching for the user's desired taxon, the dashboard will collapse any lower-level taxa into the user's taxon of interest. (e.g., If a user searches for the genus Picea, any species-level results within that search term, such as Picea glauca or Picea mariana, will be lumped together). It is generally recommended that searches are limited to the generic level (see Morley et al., 2024).
-* **Time Parameters.** The algorithm will sort pollen data into the selected time parameters. The Beginning of Interval defines the start of the study interval, while the End of Interval defines the end of the study interval. Both of these values should be written in units of ya, or "years ago." (e.g., A study interval of 20 ka–Present would be input as "Beginning of Interval = 20000" and "End of Interval = 0"). The Time Bin parameter defines to the temporal resolution of the study (e.g., one datapoint for every 500 years). The Sampling Protocol defines how the data are sorted into time bins: the "Minimum" selects the lowest abundance in the time bin as the representative datapoint, while the "Maximum" selects the greatest abundance in the time bin as the representative datapoint (see Morley et al., 2024 for more information on these two protocols).
+* **Coordinates.** The algorithm will search for pollen cores within a bounding box defined by the coordinates parameters. The *Western Longitude* and *Eastern Longitude* define the longitudinal axis, while the *Southern Latitude* and *Northern Latitude* define the latitudinal axis.
+* **Taxon of Interest.** The algorithm will filter data from select cores to only include pollen data based on the user's taxon of interest. When searching for the user's desired taxon, the dashboard will collapse any lower-level taxa into the user's taxon of interest. (*e.g., If a user searches for the genus Picea, any species-level results within that search term, such as* Picea glauca *or* Picea mariana*, will be lumped together*). It is generally recommended that searches are limited to the generic level (see Morley et al., IN REVIEW).
+* **Time Parameters.** The algorithm will sort pollen data into the selected time parameters. The *Beginning of Interval* defines the start of the study interval, while the *End of Interval* defines the end of the study interval. Both of these values should be written in units of ya, or "years ago." (*e.g., A study interval of 20 ka–Present would be input as *Beginning of Interval = 20000 *and* End of Interval = 0). The *Time Bin* parameter defines to the temporal resolution of the study (*e.g., one datapoint for every 500 years*). The *Sampling Protocol* defines how the data are sorted into time bins: the "Minimum" selects the lowest abundance in the time bin as the representative datapoint, while the "Maximum" selects the greatest abundance in the time bin as the representative datapoint (see Morley et al., IN REVIEW for more information on these two protocols).\
+\
+
 
 ### Interface Instructions
 
-After users input their search parameters, the Refuginator will display a preview of all of the pollen cores identified in the study area, including cores where the user's taxon is absent. Given the size of many Neotoma datasets, this allows users to check their selection's metadata without devoting too much computing power to retrieve the data itself; however, this can still take some time, depending on factors such as search size and internet speed. At this point, users will be given the opportunity to proceed with the extraction or input new search parameters.
-
-If the user proceeds with the selection, the dashboard will download the data for their selected cores and filter the data to only include pollen data based on their selected taxonomic and temporal parameters. A snippet of the resultant spreadsheet will be displayed on the dashboard with all of the information necessary for citing the individual cores from the Neotoma database. From here, users can download the full spreadsheet as a .csv file. This .csv file can subsequently be uploaded directly under the [Upload Data] tab for analysis, or users can further modify it based on the requirements for their project.
+After users input their search parameters, the Refuginator will display a preview of all of the pollen cores identified in the study area, including cores where the user's taxon is absent. Given the size of many Neotoma datasets, this allows users to check their selection's metadata without devoting too much computing power to retrieve the data itself; however, this can still take some time, depending on factors such as search size and internet speed. At this point, users will be given the opportunity to proceed with the extraction or input new search parameters.\
+\
+```{r echo=FALSE, out.width = "90%", fig.cap = cap}
+knitr::include_graphics("Figures/Fig13_NeotomaPreview.png")
+cap = "**Figure 13**. After clicking the Search button, users will be shown a preview of the selected sites."
+```
+\
+If the user proceeds with the selection, the dashboard will download the data for their selected cores and filter the data to only include pollen data based on their selected taxonomic and temporal parameters. A snippet of the resultant spreadsheet will be displayed on the dashboard with all of the information necessary for citing the individual cores from the Neotoma database. From here, users can download the full spreadsheet as a CSV file. This CSV file can subsequently be uploaded directly under the [Upload Data] tab for analysis, or users can further modify it based on the requirements for their project.\
+\
+```{r echo=FALSE, out.width = "90%", fig.cap = cap}
+knitr::include_graphics("Figures/Fig14_NeotomaDownload.png")
+cap = "**Figure 14**. After clicking the Proceed with Download button, users will be given a preview of the data, filtered according to their inputs. Pressing the Download Data button will download a CSV file onto the user's machine that can be uploaded on the [Upload Data] tab."
+```
+\
 
 ### Neotoma Usage Policy
 
-The Neotoma Paleoecology Database (Williams, Grimm et al., 2018) is licensed under a CC BY 4.0 license. Users are free to use data from the Neotoma database, including from the Neotoma Pollen Database functionality of this dashboard, provided they abide by Neotoma's data use and embargo policy. The creators of the Refuginator dashboard will not be held responsible for any violations or abuses of this policy.
+The Neotoma Paleoecology Database (Williams, Grimm et al., 2018) is licensed under a CC BY 4.0 license. Users are free to use data from the Neotoma database, including from the Neotoma Pollen Database functionality of this dashboard, provided they abide by Neotoma's data use and embargo policy. The creators of the Refuginator dashboard will not be held responsible for any violations or abuses of this policy.\
+\
 
 
 ## References
