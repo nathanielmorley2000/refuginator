@@ -57,22 +57,48 @@ refuginator::launchRefuginator()
 
 Upon launching the dashboard, users will be directed to the "Upload Data" tab. This page shows users the usage policy for the Refuginator and explains the correct attribution for this application.
 
+```{r echo=FALSE, out.width = "90%", fig.cap = cap}
+knitr::include_graphics("Figures/Fig1_LandingPage.png")
+cap = "**Figure 1**. Refuginator landing page."
+```
+
 After agreeing to the usage policy, a button will appear that allows users to upload their dataset:
+
+```{r echo=FALSE, out.width = "90%", fig.cap = cap}
+knitr::include_graphics("Figures/Fig2_UploadData.png")
+cap = "**Figure 2**. Agreeing to the Usage Policy allows users to upload their data."
+```
 
 Users can upload custom geospatial data as CSV files for regional analysis. The spreadsheets must be formatted to contain the following columns:
 
-* “sitename” – the name of the site
-* “lat” – the latitude for the site
-* “long” – the longitude for the site
+* *sitename* – the name of the site
+* *lat* – the latitude for the site
+* *long* – the longitude for the site
 *  Proceeding columns must be numerical dates and should increase in regular increments (e.g., 0, 500, 1000, 1500). 
 
 Each entry should show the number of specimens for the user's taxon of interest in a given locality for the corresponding time interval. Entries for which data are unavailable should be left blank; entries for which data are available but lack examples of the user's taxon of interest should be marked as "0."
 
 An example of the formatting required for a custom geospatial dataset is shown below:
 
-Data downloaded from the [Neotoma Pollen Database] feature of the Refuginator will contain two extra columns (“siteid” and “datasetid”) following the “sitename” column. These columns provide information for users to help fulfill the Neotoma Database’s Usage Policy. Spreadsheets with the “siteid” and “datasetid” column can be uploaded directly to the Refuginator for analysis. An example of the formatting required for a ready-to-use Neotoma dataset can be found below:
+```{r echo=FALSE, out.width = "90%", fig.cap = cap}
+knitr::include_graphics("Figures/Fig3_DataExampleNoID.png")
+cap = "**Figure 3**. Example dataset with the *sitename*, *latitude*, and *longitude* columns."
+```
+
+Data downloaded from the [Neotoma Pollen Database] feature of the Refuginator will contain two extra columns (*siteid* and *datasetid*) following the *sitename* column. These columns provide information for users to help fulfill the Neotoma Database’s Usage Policy. Spreadsheets with the *siteid* and *datasetid* column can be uploaded directly to the Refuginator for analysis. An example of the formatting required for a ready-to-use Neotoma dataset can be found below:
+
+```{r echo=FALSE, out.width = "90%", fig.cap = cap}
+knitr::include_graphics("Figures/Fig4_DataExampleWithID.png")
+cap = "**Figure 4**. Example dataset including the *siteid* and *datasetid* columns."
+```
 
 After uploading the data, a button marked "Analyze" will appear. Clicking this button will launch a separate tab on the application where the analysis will take place.
+
+```{r echo=FALSE, out.width = "90%", fig.cap = cap}
+knitr::include_graphics("Figures/Fig5_AnalyzeButton.png")
+cap = "**Figure 5**. Once the data is uploaded, the Analyze button will appear."
+```
+
 
 ## Regional Analysis
 ### Localities Data Over Time
