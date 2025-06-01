@@ -4,7 +4,7 @@ source("R/functions.R")
 # limit scipen to 9999
 safely_patch_options()
 
-# define user interface for Refuginator 3,000
+# define user interface for Refuginator
 ui <- fluidPage(
 
   # initialize js integration
