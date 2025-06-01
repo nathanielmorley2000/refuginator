@@ -211,8 +211,8 @@ server <- function(input, output, session) {
                            sidebarPanel(
                              h2("Monte Carlo Analysis"),
                              tags$div(style = "height: 10px;"),
-                             numericInput("entry", "Entry Incidence", value = 9),
-                             numericInput("decline", "Decline Incidence", value = 5),
+                             numericInput("entry", "Entry Presence", value = 9),
+                             numericInput("decline", "Decline Presence", value = 5),
                              numericInput("duration", "Duration of Decline (Number of Time Bins)", value = 1),
                              numericInput("nit", "Number of Iterations", value = 10000),
                              actionButton("calcButton", "Calculate"),
