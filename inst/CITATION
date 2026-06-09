@@ -1,17 +1,11 @@
 bibentry(
   bibtype = "Article",
   title = "Geohistorical data reveal an ice age refugium with implications for modern conservation",
-  author = c(
-    person(given = "Nathaniel E.D.", family = "Morley", comment = c(ORCID = "0009-0005-3816-1023")),
-    person(given = "Chris L.", family = "Schneider")m
-    person(given = "James F.", family = "Cahill", comment = c(ORCID = "0000-0002-4110-1516")),
-    person(given = "Corwin", family = "Sullivan"),
-    person(given = "Lindsey R.", family = "Leighton")
-  ),
+  author = "Nathaniel E. D. Morley and Chris L. Schneider and James F. Cahill and Corwin Sullivan and Lindsey Leighton",
   journal = "Communications Earth & Environment",
   year = "2026",
-  volume = ,
-  number = ,
-  pages = ,
+  #volume = ,
+  #number = ,
+  #pages = ,
   doi = "https://doi.org/10.1038/s43247-026-03563-3"
 )
