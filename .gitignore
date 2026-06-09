@@ -16,7 +16,6 @@
 
 # RStudio files
 .Rproj.user/
-refuginator.Rproj
 
 # Produced vignettes
 vignettes/*.html
