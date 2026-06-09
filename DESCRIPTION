@@ -1,7 +1,7 @@
 Package: refuginator
 Title: An Interactive Tool for Identifying Refugia
 Version: 0.1.0
-Authors@R: person(given = "Nathaniel E.D.", family = "Morley", email = "nathaniel.morley2000@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0009-0005-3816-1023"))
+Authors@R: person(given = "Nathaniel E. D.", family = "Morley", email = "nathaniel.morley2000@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0009-0005-3816-1023"))
 Description: A shiny-based web application for reconstructing organismal distributions and 
     identifying historical and geohistorical refugia using the methods recently 
     published by Morley et al. (2024, PNAS).
