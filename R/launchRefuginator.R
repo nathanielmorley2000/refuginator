@@ -5,8 +5,8 @@
 #' @return Launches Refuginator application in your browser. All features are contained within the application.
 #' @export
 #'
-#' @examples launchRefuginator()
-#' @examples launchRefuginator(defaultbrowser = TRUE)
+#' @examples \dontrun{launchRefuginator()}
+#' 
 
 
 launchRefuginator <- function(defaultbrowser = TRUE) {
