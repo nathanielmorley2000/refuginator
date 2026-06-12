@@ -16,6 +16,6 @@ Launches Refuginator application in your browser. All features are contained wit
 Launch the Refuginator Application in your Browser
 }
 \examples{
-launchRefuginator()
-launchRefuginator(defaultbrowser = TRUE)
+\dontrun{launchRefuginator()}
+
 }
