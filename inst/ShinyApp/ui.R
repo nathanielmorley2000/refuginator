@@ -1,10 +1,4 @@
-# load custom functions from functions.R file
-source("R/functions.R")
-
-# limit scipen to 9999
-safely_patch_options()
-
-# define user interface for Refuginator
+# DEFINE USER INTERFACE --------------------------------------------------------
 ui <- fluidPage(
 
   # initialize js integration
@@ -31,12 +25,11 @@ ui <- fluidPage(
     }
   ")),
 
-
   # create multiple tabs with different inputs and outputs
   tabsetPanel(
     id = "main_tabs",
 
-    #################### upload file ####################
+    ## Upload File page --------------------------------------------------------
     tabPanel("Upload Data",
 
              # assign ID for styling
@@ -61,11 +54,10 @@ ui <- fluidPage(
                   )
              )
     ),
-    #####################################################
 
     # "Regional Analysis" tab will be inserted here
 
-    #################### Neotoma Database ####################
+    ## Neotoma Database page ---------------------------------------------------
     tabPanel("Neotoma Pollen Database",
              sidebarLayout(
 
@@ -115,6 +107,5 @@ ui <- fluidPage(
                  )
                )
              ))
-    ##########################################################
   )
 )
