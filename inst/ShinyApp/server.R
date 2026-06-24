@@ -226,10 +226,10 @@ server <- function(input, output, session) {
                               shinycssloaders::withSpinner(plotly::plotlyOutput("dataPlot"), type = 6),
                               tags$hr(),
                               h2("Animated Heat Map"),
-                              uiOutput("plot_ui"),
-                              actionButton("play", "Play Animation"),
-                              actionButton("pause", "Pause Animation"),
-                              uiOutput("time_slider_ui"),
+                              uiOutput("plotUI"),
+                              #actionButton("play", "Play Animation"),
+                              #actionButton("pause", "Pause Animation"),
+                              #uiOutput("time_slider_ui"),
                               downloadButton("downloadAnimation", "Download Animation")
 
                            ))),
@@ -369,115 +369,25 @@ server <- function(input, output, session) {
     data_loaded(TRUE)
     return(mapdata)
   })
-
-  # Render the time slider UI dynamically based on the data
-  output$time_slider_ui <- renderUI({
-    df <- mapData()
-    req(df)
-
-    # Extract unique time points
-    time_points <- levels(df$time)
-
-    # Slider for selecting time
-    sliderInput(
-      inputId = "time_slider",
-      label = "Select Time:",
-      min = 1,
-      max = length(time_points),
-      value = 1,
-      step = 1,
-      ticks = FALSE,
-      animate = FALSE,
-      width = "100%",
-      sep = ""
-    )
-  })
-
-  # Reactive value to track current time bin index and observer
-  rv <- reactiveValues(
-    current_time = 1,
-    is_playing = FALSE,
-    timer = NULL,      # reactiveTimer
-    timer_obs = NULL   # Observer
-  )
-
+  
   # Render plot UI with conditional spinner
   output$plot_ui <- renderUI({
     if (!data_loaded()) {
       # Data is loading; show spinner
-      shinycssloaders::withSpinner(plotOutput("animated_plot", height = "700px"), type = 6)
+      withSpinner(plotOutput("animated_plot", height = "700px"))
     } else {
       plotOutput("animated_plot", height = "700px")
     }
-  })
-
-  # Observe Play button
-  observeEvent(input$play, {
-    if (!rv$is_playing) {
-      rv$is_playing <- TRUE
-      rv$timer <- reactiveTimer(2000, session)  # 2-second interval
-
-      # Create and assign the observer to rv$timer_obs
-      rv$timer_obs <- observe({
-        rv$timer()  # Trigger every 1.5 seconds
-        isolate({
-          if (!rv$is_playing) return()  # Double-check state
-
-          df <- mapData()
-          req(df)
-          time_levels <- levels(df$time)
-          current_index <- rv$current_time
-
-          # Increment the time index
-          new_index <- (current_index %% length(time_levels)) + 1
-          rv$current_time <- new_index
-          updateSliderInput(session, "time_slider", value = new_index)
-        })
-      })
-    }
-  })
-
-  # Observe Pause button
-  observeEvent(input$pause, {
-    if (rv$is_playing) {
-      rv$is_playing <- FALSE
-      # Destroy the observer to stop the timer
-      if (!is.null(rv$timer_obs)) {
-        rv$timer_obs$destroy()
-        rv$timer_obs <- NULL
-      }
-      rv$timer <- NULL  # Clear the timer
-    }
-  })
-
-  # Update current_time based on slider
-  observeEvent(input$time_slider, {
-    rv$current_time <- input$time_slider
-  })
-
-  # automatically draw bounding box with 10% margin around the datapoints
-  expandedBBox <- reactive({
-    # define the data
-    map_data <- mapData()
-
-    # custom function in functions.R that automatically finds bounding box from coordinates on datasheet
-    expanded_bbox <- find_bbox(map_data)
-    return(expanded_bbox)
-  })
-
-  # further modify the bounding box so it can be placed on map
-  expandedBBoxsfc <- reactive({
-    expanded_bbox_sfc <- sf::st_as_sfc(expandedBBox())
-    return(expanded_bbox_sfc)
-  })
-
+  }) 
+  
+  
   # Render the animation and provide a download option
   output$animated_plot <- renderPlot({
     df <- mapData()
     expanded_bbox <- expandedBBox()
     expanded_bbox_sfc <- expandedBBoxsfc()
     req(df)
-
+    
     # Extract unique time points
     time_points <- rev(levels(df$time))
     current_time_index <- rv$current_time
@@ -485,50 +395,51 @@ server <- function(input, output, session) {
     # Filter data for the current time, but don't drop 0s or NAs here
     df_time <- df %>%
       dplyr::filter(time == current_time)
-
+    
     # Set up the base map
-    base_map <- ggplot2::ggplot() +
-      ggplot2::geom_sf(data = countries, fill = "lightgrey", color = "black") +  # Background countries
-      ggplot2::geom_sf(data = expanded_bbox_sfc, fill = NA, color = "black", lwd = 2) +  # Bounding box
-      ggplot2::coord_sf(xlim = c(expanded_bbox$xmin, expanded_bbox$xmax),
+    base_map <- ggplot() +
+      geom_sf(data = countries, fill = "lightgrey", color = "black") +  # Background countries
+      geom_sf(data = expanded_bbox_sfc, fill = NA, color = "black", lwd = 2) +  # Bounding box
+      coord_sf(xlim = c(expanded_bbox$xmin, expanded_bbox$xmax),
                ylim = c(expanded_bbox$ymin, expanded_bbox$ymax),
                expand = FALSE) +  # Zoom into bounding box
-      ggplot2::xlab("Longitude") +
-      ggplot2::ylab("Latitude") +
-      ggplot2::theme_minimal(base_size = 20)
-
+      xlab("Longitude") +
+      ylab("Latitude") +
+      theme_minimal(base_size = 20)
+    
     # Check if there are any non-NA values for this time slice
     if (nrow(df_time) > 0) {
-
+      
       # Plot points onto base map
       map_with_data <- base_map +
-        ggplot2::geom_point(data = df_time, ggplot2::aes(x = long, y = lat, color = value, group = time), size = 10) +
-        ggplot2::scale_size_continuous(guide = 'none') +
-
+        geom_point(data = df_time, aes(x = long, y = lat, color = value, group = time), size = 10) +
+        scale_size_continuous(guide = 'none') +
+        
         # Set up a dual color scale: 0 values as white, others with viridis gradient
-        ggplot2::scale_color_gradientn(
-          colors = c("white", viridis::viridis(256)),  # White for 0, viridis for others
+        scale_color_gradientn(
+          colors = c("white", viridis(256)),  # White for 0, viridis for others
           values = scales::rescale(c(0, 1)),  # Ensure 0 is mapped to white
           limits = c(0, max(df$value, na.rm = TRUE)),  # Set limits starting from 0
           na.value = NA  # Ensure NA values are not plotted
         ) +
-
-        ggplot2::labs(title = paste("Geospatial Heat Map - Time:", current_time, "ya"),
+        
+        labs(title = paste("Geospatial Heat Map - Time:", current_time, "ya"),
              color = "Abundance")
-
+      
     } else {
       # If there is no data (empty slice), just plot the base map and color legend
       map_with_data <- base_map +
-        ggplot2::scale_color_gradientn(
-          colors = viridis::viridis(256),
+        scale_color_gradientn(
+          colors = viridis(256), 
           limits = c(0, 10),  # Arbitrary limits to ensure the color scale appears
           na.value = "white"
         ) +
-        ggplot2::labs(title = paste("Geospatial Heat Map - Time:", current_time, "ya"),
+        labs(title = paste("Geospatial Heat Map - Time:", current_time, "ya"),
              color = "Abundance")
     }
     return(map_with_data)
   })
+
 
 
   # allows user to download animation to their file directory
