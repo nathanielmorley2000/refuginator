@@ -142,7 +142,7 @@ server <- function(input, output, session) {
   
   
   # Reactive value to track if data is loaded
-  data_loaded <- reactiveVal(FALSE)
+  #data_loaded <- reactiveVal(FALSE)
 
   
   # Reactive expression to read the uploaded file
@@ -304,25 +304,37 @@ server <- function(input, output, session) {
 
 ### UI Output ------------------------------------------------------------------
   
+ # data_loaded <- reactiveVal(FALSE)
+  
   # Render plot UI with conditional spinner
-  output$plot_ui <- renderUI({
-    
-    # Data is loading; show spinner
-    if (!data_loaded()) {
-      withSpinner(plotOutput("animated_plot", height = "700px"))
-    
-      # Otherwise show plot
-      } else {
-      plotOutput("animated_plot", height = "700px")
-    }
-  }) 
+#  output$plot_ui <- renderUI({
+#    withSpinner(plotOutput("animated_plot", height = "700px"))
+#    # Data is loading; show spinner
+#    if (!data_loaded()) {
+#      withSpinner(plotOutput("animated_plot", height = "700px"))
+#    
+#      # Otherwise show plot
+#      } else {
+#      plotOutput("animated_plot", height = "700px")
+#    }
+#  }) 
   
 
   
 ### Plot Map -------------------------------------------------------------------
   
   # Render the animation and provide a download option
-  output$animated_plot <- renderPlot({
+  observeEvent(input$analyze_btn, {
+    
+    # Download notification
+    rendering_notification <- showNotification("Your animation is rendering. This may take a minute.", 
+                                              type = "message", duration = NULL,
+                                              closeButton = FALSE)
+    
+    # Remove notification upon completion
+    on.exit({
+      removeNotification(rendering_notification)
+    })
     
     # Define necessary inputs
     req(expandedBBoxsfc())
@@ -337,7 +349,17 @@ server <- function(input, output, session) {
     
     # Create static heatmap animation using StaticHeatmaps.R
     map_with_animation <- staticHeatmap(map_data, expanded_bbox, expanded_bbox_sfc, countries, timebins)
-    return(map_with_animation)
+    
+    #data_loaded(TRUE)
+    # Save animation as GIF
+    num_years <- length(timebins)
+    dir.create("inst/shinyApp/www/")
+    gganimate::anim_save("www/animation.gif", animation = gganimate::animate(map_with_animation,
+                                                                                            nframes = num_years,
+                                                                                            fps = 1.5,
+                                                                                            width = 1600,
+                                                                                            height = 1200,
+                                                                                            res = 150))
   })
 
 
