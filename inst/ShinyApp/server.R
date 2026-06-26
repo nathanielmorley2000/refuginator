@@ -327,7 +327,7 @@ server <- function(input, output, session) {
     
     # Save animation as GIF
     num_years <- length(timebins)
-    dir.create("inst/shinyApp/www/")
+    dir.create("inst/shinyApp/www/", showWarnings = FALSE)
     gganimate::anim_save("www/animation.gif", animation = gganimate::animate(map_with_animation,
                                                                                             nframes = num_years,
                                                                                             fps = 1.5,
