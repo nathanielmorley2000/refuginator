@@ -1,8 +1,4 @@
-# define server logic for Refuginator 3,000
 server <- function(input, output, session) {
-
-  # Define pipe operator for code
-  "%>%" <- dplyr::"%>%"
 
 # NEOTOMA DATABASE -------------------------------------------------------------
   
@@ -307,81 +303,41 @@ server <- function(input, output, session) {
 ## Display static animations ---------------------------------------------------
 
 ### UI Output ------------------------------------------------------------------
-
-
   
   # Render plot UI with conditional spinner
   output$plot_ui <- renderUI({
+    
+    # Data is loading; show spinner
     if (!data_loaded()) {
-      # Data is loading; show spinner
       withSpinner(plotOutput("animated_plot", height = "700px"))
-    } else {
+    
+      # Otherwise show plot
+      } else {
       plotOutput("animated_plot", height = "700px")
     }
   }) 
   
 
   
-  
 ### Plot Map -------------------------------------------------------------------
   
   # Render the animation and provide a download option
   output$animated_plot <- renderPlot({
-    df <- mapData()
+    
+    # Define necessary inputs
+    req(expandedBBoxsfc())
+    map_data <- mapData()
     expanded_bbox <- expandedBBox()
     expanded_bbox_sfc <- expandedBBoxsfc()
-    req(df)
     
-    # Extract unique time points
-    time_points <- rev(levels(df$time))
-    current_time_index <- rv$current_time
-    current_time <- time_points[current_time_index]
-    # Filter data for the current time, but don't drop 0s or NAs here
-    df_time <- df %>%
-      dplyr::filter(time == current_time)
+    # Sort time bins
+    map_data <- map_data %>%
+      dplyr::mutate(time = as.numeric(as.character(time)))
+    timebins <- sort(unique(map_data$time))
     
-    # Set up the base map
-    base_map <- ggplot() +
-      geom_sf(data = countries, fill = "lightgrey", color = "black") +  # Background countries
-      geom_sf(data = expanded_bbox_sfc, fill = NA, color = "black", lwd = 2) +  # Bounding box
-      coord_sf(xlim = c(expanded_bbox$xmin, expanded_bbox$xmax),
-               ylim = c(expanded_bbox$ymin, expanded_bbox$ymax),
-               expand = FALSE) +  # Zoom into bounding box
-      xlab("Longitude") +
-      ylab("Latitude") +
-      theme_minimal(base_size = 20)
-    
-    # Check if there are any non-NA values for this time slice
-    if (nrow(df_time) > 0) {
-      
-      # Plot points onto base map
-      map_with_data <- base_map +
-        geom_point(data = df_time, aes(x = long, y = lat, color = value, group = time), size = 10) +
-        scale_size_continuous(guide = 'none') +
-        
-        # Set up a dual color scale: 0 values as white, others with viridis gradient
-        scale_color_gradientn(
-          colors = c("white", viridis(256)),  # White for 0, viridis for others
-          values = scales::rescale(c(0, 1)),  # Ensure 0 is mapped to white
-          limits = c(0, max(df$value, na.rm = TRUE)),  # Set limits starting from 0
-          na.value = NA  # Ensure NA values are not plotted
-        ) +
-        
-        labs(title = paste("Geospatial Heat Map - Time:", current_time, "ya"),
-             color = "Abundance")
-      
-    } else {
-      # If there is no data (empty slice), just plot the base map and color legend
-      map_with_data <- base_map +
-        scale_color_gradientn(
-          colors = viridis(256), 
-          limits = c(0, 10),  # Arbitrary limits to ensure the color scale appears
-          na.value = "white"
-        ) +
-        labs(title = paste("Geospatial Heat Map - Time:", current_time, "ya"),
-             color = "Abundance")
-    }
-    return(map_with_data)
+    # Create static heatmap animation using StaticHeatmaps.R
+    map_with_animation <- staticHeatmap(map_data, expanded_bbox, expanded_bbox_sfc, countries, timebins)
+    return(map_with_animation)
   })
 
 
