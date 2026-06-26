@@ -382,4 +382,12 @@ server <- function(input, output, session) {
                                                                 height = 1200,
                                                                 res = 150))
     })
+  
+  
+  
+# CLOSE APPLICATION ------------------------------------------------------------
+  
+  session$onSessionEnded(function() {
+    stopApp()
+  })
   }
