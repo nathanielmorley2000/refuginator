@@ -81,49 +81,7 @@ findNeotoma <- function(al_pollen, taxon, taxonReplace, timeBin, yearMin, yearMa
   return(pivot_table)
 }
 
-summarizeData <- function(data, control) {
-  # Perform your data transformation here using dplyr
-  data = data %>%
-    dplyr::select(!c("lat", "long")) %>%
-    tidyr::pivot_longer(cols = -sitename, names_to = "time", values_to = "abundance")  # Replace COLUMN_NAME with actual column name
 
-  tryCatch({
-    # Capture warnings during the mutate() step
-    withCallingHandlers({
-      # Handle rows where COLUMN_NAME could not be converted to numeric
-      data = data %>%
-        dplyr::group_by(time) %>%
-        dplyr::summarize(
-          localities_with_data = sum(!is.na(abundance)),
-          localities_with_pollen = sum(abundance > 0, na.rm = TRUE)
-        ) %>%
-        dplyr::mutate(
-          time = as.numeric(time),
-          localities_with_data = as.numeric(localities_with_data),
-          localities_with_pollen = as.numeric(localities_with_pollen)
-        ) %>%
-        dplyr::arrange(time)
-      return(data)
-    }, warning = function(w) {
-
-      # throw error message if extra columns are messing up calculations
-      shiny::showModal(modalDialog(
-          title = "Error: Extra Columns Present",
-          "It seems that extra columns are present in your uploaded data. Please ensure only the required columns are included.",
-          easyClose = TRUE,
-          footer = NULL
-        ))
-
-      # add JavaScript to refresh the page after closing the error message
-      shinyjs::runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
-
-      # Suppress the warning and stop further execution in this context
-      invokeRestart("muffleWarning")
-
-      control = FALSE
-    })
-  })
-}
 
 # significance of going from >= 11 down to <= 5 for 7 time bins, then back up to >= 11
 monteCarlo <- function(entry, decline, duration, nit, summary) {
@@ -155,32 +113,4 @@ monteCarlo <- function(entry, decline, duration, nit, summary) {
   return(score)
 }
 
-find_bbox <- function(map_data) {
-  # find original bounding box
-  coordinates = sf::st_as_sf(map_data, coords = c("long", "lat"), crs = 4326)
-  bbox = sf::st_bbox(coordinates)
 
-  # set margin to 0.1 and find original height and width
-  margin = 0.1
-  width = bbox$xmax - bbox$xmin
-  height = bbox$ymax - bbox$ymin
-
-  # adjust coordinates to accommodate margin
-  xmin = bbox$xmin - width * margin
-  xmax = bbox$xmax + width * margin
-  ymin = bbox$ymin - height * margin
-  ymax = bbox$ymax + height * margin
-
-  # create new bounding box and convert so it can be recognized by ggplot2
-  bbox_coords = matrix(c(xmin, ymin,  # lower-left
-                         xmax, ymin,  # lower-right
-                         xmax, ymax,  # upper-right
-                         xmin, ymax,  # upper-left
-                         xmin, ymin), # close the polygon
-                       ncol = 2, byrow = TRUE)
-  bbox_polygon = sf::st_polygon(list(bbox_coords))
-  bbox_sf = sf::st_sfc(bbox_polygon, crs = 4326)
-  expanded_bbox <- sf::st_bbox(bbox_sf)
-
-  # finish function and return adjusted bounding box values
-  return(expanded_bbox)}
