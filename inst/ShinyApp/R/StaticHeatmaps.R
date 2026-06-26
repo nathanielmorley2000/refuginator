@@ -1,5 +1,9 @@
 staticHeatmap <- function(map_data, expanded_bbox, expanded_bbox_sfc, countries, timebins) {
   
+  # Organize map_data so lowest values plotted under highest values
+  map_data <- map_data %>%
+    dplyr::arrange(value)
+  
   # Create base map
   base_map <- ggplot2::ggplot() +
     ggplot2::geom_sf(data = countries, fill = "lightgrey", color = "black") +  # Background countries
