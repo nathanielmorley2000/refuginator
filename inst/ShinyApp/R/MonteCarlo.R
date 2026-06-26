@@ -1,9 +1,13 @@
 monteCarlo <- function(entry, decline, duration, nit, summary) {
+  
+  # Set trackers to default
   it = 1
   score = 0
   count = 0
+  
+  # Calculate number of iterations where the there is a dip with a magnitude and duration that matches or exceeds that specified
   for(it in 1:nit){
-    vec = floor(runif(nrow(summary), min = 0, max = summary$localities_with_data + 1)) # randomly generate integer for each time bin between 0 and the number of available localities
+    vec = floor(runif(nrow(summary), min = 0, max = summary$localities_with_data + 1)) # Randomly generate integer for each time bin between 0 and the number of available localities
     indices_greater_than_entry = which(vec >= entry)
     if(length(indices_greater_than_entry) > 1){
       for(i in 1:length(indices_greater_than_entry)){
