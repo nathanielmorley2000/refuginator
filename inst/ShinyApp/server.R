@@ -4,7 +4,8 @@ server <- function(input, output, session) {
   # define pipe operator for code
   "%>%" <- dplyr::"%>%"
 
-  #################### Neotoma Database ####################
+# NEOTOMA DATABASE -------------------------------------------------------------
+  
   sites <- observeEvent(input$neotomaSearch, {
     # check to make sure all fields are filled out
     if (is.na(input$xmin) ||
@@ -126,35 +127,77 @@ server <- function(input, output, session) {
     modified_taxon_name = paste0(taxon, ".*")
     return(modified_taxon_name)
   })
-  ##########################################################
 
 
-  #################### upload file ####################
+# UPLOAD DATA ------------------------------------------------------------------
+  
+## Mechanics -------------------------------------------------------------------  
+  
+  # Server-side indicator for whether a file has been uploaded
+  output$fileUploaded <- reactive({
+    return(!is.null(rawData()))
+  })
+  outputOptions(output, "fileUploaded", suspendWhenHidden = FALSE)
+  
+  
   # Reactive value to track if data is loaded
   data_loaded <- reactiveVal(FALSE)
 
-  # reactive expression to read the uploaded file
+  
+  # Reactive expression to read the uploaded file
   rawData <- reactive({
     req(input$file1)
     inFile <- input$file1
     rawdata <- read.csv(inFile$datapath, header = TRUE, sep = ",", quote = '"', check.names = FALSE)
-
     return(rawdata)
   })
 
+  
+  # Dynamically show the "Analyze" button once a file is uploaded
+  output$analyze_btn_ui <- renderUI({
+    if (!is.null(input$file1)) {
+      actionButton("analyze_btn", "Analyze")
+    }
+  })
+  
 
+  
+## Insert REGIONAL ANALYSIS tab ------------------------------------------------
+  
+  # Default to being absent
+  tab_inserted <- reactiveVal(FALSE)
+  
+  
+  # Dynamically insert REGIONAL ANALYSIS tab when "Analyze" button pressed
+  observeEvent(input$analyze_btn, {
+    if (!tab_inserted()) {
+      
+      # Use UI template in InsertRegionalAnalysis.R
+      insertRegionalAnalysis()
+      tab_inserted(TRUE)
+      }
+    
+    # Automatically switch to the newly inserted "Analysis" tab
+    updateTabsetPanel(session, "main_tabs", selected = paste("Regional Analysis"))
+    })
+
+
+
+  
+# DATA ORGANIZATION ------------------------------------------------------------
+  
   # Reactive expression to transform the data
   transformedData <- reactive({
     # define user inputs
     data = rawData()
-
+    
     # remove siteid and datasetid columns, if present
     unwanted_columns = c("siteid", "datasetid")
     existing_columns = colnames(data)
     columns_to_remove = dplyr::intersect(existing_columns, unwanted_columns)
     data = data %>%
       dplyr::select(-all_of(columns_to_remove))
-
+    
     # Check if the first three columns are correct
     expected_initial_columns <- c("sitename", "lat", "long")
     uploaded_columns <- colnames(data)
@@ -165,96 +208,96 @@ server <- function(input, output, session) {
         easyClose = TRUE,
         footer = NULL
       ))
-
+      
       # add JavaScript to refresh the page after closing the error message
       shinyjs::runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
-
+      
     } else {
-
+      
       # set control to "TRUE"
       control = TRUE
-
+      
       # custom function from functions.R file that summarizes number of localities with data and those with pollen for each time bin
-        data = summarizeData(data, control)
-
-        if (control == TRUE) {
+      data = summarizeData(data, control)
+      
+      if (control == TRUE) {
         # pivot to a long table that can be used for graphing
         data = data %>%
           tidyr::pivot_longer(cols = c(localities_with_data, localities_with_pollen),
-                       names_to = "metric", values_to = "value")
+                              names_to = "metric", values_to = "value")
         return(data)
-        } else {
-          data = NULL
-        }
+      } else {
+        data = NULL
+      }
     }
   })
-
-  # code for displaying regional analysis tab when "Analyze" button clicked
-  tab_inserted <- reactiveVal(FALSE)
-
-  # dynamically show the "Analyze" button once a file is uploaded
-  output$analyze_btn_ui <- renderUI({
-    if (!is.null(input$file1)) {
-      actionButton("analyze_btn", "Analyze")
+  
+  
+  # automatically draw bounding box with 10% margin around the datapoints
+  expandedBBox <- reactive({
+    map_data <- mapData()
+    
+    # custom function in functions.R that automatically finds bounding box from coordinates on datasheet
+    expanded_bbox <- find_bbox(map_data)
+    return(expanded_bbox)
+  })
+  
+  
+  # further modify the bounding box so it can be placed on map
+  expandedBBoxsfc <- reactive({
+    expanded_bbox_sfc <- sf::st_as_sfc(expandedBBox())
+    return(expanded_bbox_sfc)
+  })
+  
+  
+  # Validate required columns
+  required_cols <- c("sitename", "lat", "long")
+  
+  
+  # reactive expression to transform the data
+  mapData <- reactive({
+    # define user input
+    mapdata <- rawData()
+    req(mapdata)
+    
+    # remove siteid and datasetid columns, if present
+    unwanted_columns = c("siteid", "datasetid")
+    existing_columns = colnames(mapdata)
+    columns_to_remove = dplyr::intersect(existing_columns, unwanted_columns)
+    mapdata <- mapdata %>%
+      dplyr::select(-all_of(columns_to_remove))
+    
+    # Validate required columns
+    required_cols <- c("sitename", "lat", "long")
+    
+    # Identify time columns (all except the required ones)
+    time_cols <- setdiff(names(mapdata), required_cols)
+    if(length(time_cols) == 0) {
+      showNotification("No numerical columns found for time categories. Please include at least one time-based numerical column.", type = "error")
+      return(NULL)
     }
+    
+    # transform data into a method that can
+    mapdata <- mapdata %>%
+      tidyr::pivot_longer(cols = all_of(time_cols),
+                          names_to = "time", values_to =
+                            "value") %>%
+      tidyr::drop_na(value) %>%
+      dplyr::mutate(time = as.numeric(as.character(time))) %>%
+      dplyr::mutate(time = factor(time, levels = sort(unique(time)))) %>%
+      dplyr::mutate(value = as.numeric(value))
+    
+    
+    # Set data_loaded to TRUE after successful processing
+    data_loaded(TRUE)
+    return(mapdata)
   })
+  
 
-  # Observe the Analyze button click
-  observeEvent(input$analyze_btn, {
-    if (!tab_inserted()) {
-      # Insert the new "Analysis" tab dynamically
-      insertTab(inputId = "main_tabs",
-                #################### regional analysis ####################
-                tabPanel("Regional Analysis",
-                         sidebarLayout(
-                           # Sidebar panel for Monte Carlo inputs ----
-                           sidebarPanel(
-                             h2("Monte Carlo Analysis"),
-                             tags$div(style = "height: 10px;"),
-                             numericInput("entry", "Entry Presence", value = 9),
-                             numericInput("decline", "Decline Presence", value = 5),
-                             numericInput("duration", "Duration of Decline (Number of Time Bins)", value = 1),
-                             numericInput("nit", "Number of Iterations", value = 10000),
-                             actionButton("calcButton", "Calculate"),
-                             tags$hr(),
-                             h4("Realized p-value:"),
-                             verbatimTextOutput("calcResult")
-                           ),
-                           # Main panel for displaying outputs ----
-                           mainPanel(
-                              h2("Regional Presence Plot"),
-                              shinycssloaders::withSpinner(plotly::plotlyOutput("dataPlot"), type = 6),
-                              tags$hr(),
-                              h2("Animated Heat Map"),
-                              uiOutput("plotUI"),
-                              #actionButton("play", "Play Animation"),
-                              #actionButton("pause", "Pause Animation"),
-                              #uiOutput("time_slider_ui"),
-                              downloadButton("downloadAnimation", "Download Animation")
-
-                           ))),
-                ###########################################################
-        target = "Upload Data",
-        position = "after"
-    )
-    tab_inserted(TRUE)
-  }
-  # Automatically switch to the newly inserted "Analysis" tab
-  updateTabsetPanel(session, "main_tabs", selected = "Regional Analysis")
-})
-
-  #####################################################
-
-
-  #################### regional analysis ####################
-  # indicator for whether a file has been uploaded
-  output$fileUploaded <- reactive({
-    return(!is.null(rawData()))
-  })
-  outputOptions(output, "fileUploaded", suspendWhenHidden = FALSE)
-
-
-  ##### regional incidence plot #####
+# REGIONAL ANALYSIS ------------------------------------------------------------
+  
+## Regional Presence Plot ------------------------------------------------------
+  
   output$dataPlot <- plotly::renderPlotly({
     # define necessary data
     req(transformedData())
@@ -274,10 +317,9 @@ server <- function(input, output, session) {
     plotly::ggplotly(p) %>%
       plotly::layout(hovermode = "x")
   })
-  ###################################
 
 
-  ##### Monte Carlo analysis #####
+## Spatial Monte Carlo ---------------------------------------------------------
   observeEvent(input$calcButton, {
     # check to make sure all fields are filled out
     if (is.na(input$entry) ||
@@ -321,54 +363,14 @@ server <- function(input, output, session) {
       })
     }
   })
-  ################################
 
 
-  ##### site-specific animations #####
-  # Load country boundaries
-  countries <- rnaturalearth::ne_countries(scale = "medium", returnclass = "sf")
 
-  # Validate required columns
-  required_cols <- c("sitename", "lat", "long")
+## Display static animations ---------------------------------------------------
 
-  # reactive expression to transform the data
-  mapData <- reactive({
-    # define user input
-    mapdata <- rawData()
-    req(mapdata)
-
-    # remove siteid and datasetid columns, if present
-    unwanted_columns = c("siteid", "datasetid")
-    existing_columns = colnames(mapdata)
-    columns_to_remove = dplyr::intersect(existing_columns, unwanted_columns)
-    mapdata <- mapdata %>%
-      dplyr::select(-all_of(columns_to_remove))
-
-    # Validate required columns
-    required_cols <- c("sitename", "lat", "long")
-
-    # Identify time columns (all except the required ones)
-    time_cols <- setdiff(names(mapdata), required_cols)
-    if(length(time_cols) == 0) {
-      showNotification("No numerical columns found for time categories. Please include at least one time-based numerical column.", type = "error")
-      return(NULL)
-    }
-
-    # transform data into a method that can
-    mapdata <- mapdata %>%
-      tidyr::pivot_longer(cols = all_of(time_cols),
-                   names_to = "time", values_to =
-                     "value") %>%
-      tidyr::drop_na(value) %>%
-      dplyr::mutate(time = as.numeric(as.character(time))) %>%
-      dplyr::mutate(time = factor(time, levels = sort(unique(time)))) %>%
-      dplyr::mutate(value = as.numeric(value))
+### UI Output ------------------------------------------------------------------
 
 
-    # Set data_loaded to TRUE after successful processing
-    data_loaded(TRUE)
-    return(mapdata)
-  })
   
   # Render plot UI with conditional spinner
   output$plot_ui <- renderUI({
@@ -380,6 +382,10 @@ server <- function(input, output, session) {
     }
   }) 
   
+
+  
+  
+### Plot Map -------------------------------------------------------------------
   
   # Render the animation and provide a download option
   output$animated_plot <- renderPlot({
@@ -442,66 +448,49 @@ server <- function(input, output, session) {
 
 
 
-  # allows user to download animation to their file directory
+## Download Animation ----------------------------------------------------------
+  
+  # Begin downloading when button pressed
   output$downloadAnimation <- downloadHandler(
     filename = function() {
+      
+      # Default filename
       paste("heatmap_animation.gif")
     },
     content = function(file) {
+      
+      # Download notification
+      download_notification <- showNotification("Your animation is downloading. This may take a minute.", 
+                                                type = "message", duration = NULL,
+                                                closeButton = FALSE)
+      
+      # Remove notification upon download
+      on.exit({
+        removeNotification(download_notification)
+      })
 
-      # define necessary inputs
+      # Define necessary inputs
       req(expandedBBoxsfc())
       map_data <- mapData()
       expanded_bbox <- expandedBBox()
       expanded_bbox_sfc <- expandedBBoxsfc()
-
+      
+      # Sort time bins
       map_data <- map_data %>%
         dplyr::mutate(time = as.numeric(as.character(time)))
-
       timebins <- sort(unique(map_data$time))
 
-      # create base map
-      base_map <- ggplot2::ggplot() +
-        ggplot2::geom_sf(data = countries, fill = "lightgrey", color = "black") +  # Background countries
-        ggplot2::geom_sf(data = expanded_bbox_sfc, fill = NA, color = "black", lwd = 2) +  # Bounding box
-        ggplot2::coord_sf(xlim = c(expanded_bbox$xmin, expanded_bbox$xmax),
-                 ylim = c(expanded_bbox$ymin, expanded_bbox$ymax),
-                 expand = FALSE) +  # Zoom into bounding box
-        ggplot2::xlab("Longitude") +
-        ggplot2::ylab("Latitude")+
-        ggplot2::theme_minimal(base_size = 20)
-
-      # plot data onto base map with black points being n=0 and coloured points reflecting number of grains >1
-      map_with_data <- base_map +
-        ggplot2::geom_point(data = map_data, ggplot2::aes(x = long, y = lat, color = value, group = time), size = 10) +
-        ggplot2::scale_size_continuous(guide = 'none') +
-
-        # Set up a dual color scale: 0 values as white, others with viridis gradient
-        ggplot2::scale_color_gradientn(
-          colors = c("white", viridis::viridis(256)),  # White for 0, viridis for others
-          values = scales::rescale(c(0, 1)),  # Ensure 0 is mapped to white
-          limits = c(0, max(map_data$value, na.rm = TRUE)),  # Set limits starting from 0
-          na.value = NA  # Ensure NA values are not plotted
-        ) +
-
-        ggplot2::labs(color = "Abundance")
-
-      # animate the map through time
-      map_with_animation <- map_with_data +
-        gganimate::transition_time(-time) +
-        ggplot2::ggtitle('Year: {frame_time}',
-                subtitle = 'Frame {frame} of {nframes}')
+      # Create static heatmap animation using StaticHeatmaps.R
+      map_with_animation <- staticHeatmap(map_data, expanded_bbox, expanded_bbox_sfc, countries, timebins)
+      
+      # Save animation as GIF
       num_years <- length(timebins)
-
-      # save map to www/ folder
       gganimate::anim_save(file, animation = gganimate::animate(map_with_animation,
-                                          nframes = num_years,
-                                          fps = 1.5,
-                                          width = 1600,
-                                          height = 1200,
-                                          res = 150))
+                                                                nframes = num_years,
+                                                                fps = 1.5,
+                                                                width = 1600,
+                                                                height = 1200,
+                                                                res = 150))
+    })
 
-    }
-  )
-  ####################################
-}
+  }
