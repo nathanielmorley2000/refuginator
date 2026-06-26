@@ -188,62 +188,24 @@ server <- function(input, output, session) {
   
   # Reactive expression to transform the data
   transformedData <- reactive({
-    # define user inputs
     data = rawData()
     
-    # remove siteid and datasetid columns, if present
-    unwanted_columns = c("siteid", "datasetid")
-    existing_columns = colnames(data)
-    columns_to_remove = dplyr::intersect(existing_columns, unwanted_columns)
-    data = data %>%
-      dplyr::select(-all_of(columns_to_remove))
-    
-    # Check if the first three columns are correct
-    expected_initial_columns <- c("sitename", "lat", "long")
-    uploaded_columns <- colnames(data)
-    if (!all(expected_initial_columns == uploaded_columns[1:3])) {
-      shiny::showModal(modalDialog(
-        title = "Error: Invalid Columns",
-        "If using custom data, the first three columns must be 'sitename', 'lat', and 'long'.",
-        easyClose = TRUE,
-        footer = NULL
-      ))
-      
-      # add JavaScript to refresh the page after closing the error message
-      shinyjs::runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
-      
-    } else {
-      
-      # set control to "TRUE"
-      control = TRUE
-      
-      # custom function from functions.R file that summarizes number of localities with data and those with pollen for each time bin
-      data = summarizeData(data, control)
-      
-      if (control == TRUE) {
-        # pivot to a long table that can be used for graphing
-        data = data %>%
-          tidyr::pivot_longer(cols = c(localities_with_data, localities_with_pollen),
-                              names_to = "metric", values_to = "value")
-        return(data)
-      } else {
-        data = NULL
-      }
-    }
+    # Custom function from DataOrganization.R that arranges data for plotting
+    transformData(data)
   })
   
   
-  # automatically draw bounding box with 10% margin around the datapoints
+  # Automatically draw bounding box with 10% margin around the datapoints
   expandedBBox <- reactive({
     map_data <- mapData()
     
-    # custom function in functions.R that automatically finds bounding box from coordinates on datasheet
+    # Custom function in DataOrganization.R that automatically finds bounding box from coordinates on datasheet
     expanded_bbox <- find_bbox(map_data)
     return(expanded_bbox)
   })
   
   
-  # further modify the bounding box so it can be placed on map
+  # Further modify the bounding box so it can be placed on map
   expandedBBoxsfc <- reactive({
     expanded_bbox_sfc <- sf::st_as_sfc(expandedBBox())
     return(expanded_bbox_sfc)
