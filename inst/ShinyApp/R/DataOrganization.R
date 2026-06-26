@@ -94,50 +94,78 @@ transformData <- function(data) {
 
 
 
-
-
-
 # Geospatial Data Visualisation  -----------------------------------------------
 
 # Load country borders
 countries <- rnaturalearth::ne_countries(scale = "medium", returnclass = "sf")
 
+
+# Custom function to transform data into a format that can be used for animations
+findMapData <- function(mapdata) {
+  
+  # Remove siteid and datasetid columns, if present
+  unwanted_columns = c("siteid", "datasetid")
+  existing_columns = colnames(mapdata)
+  columns_to_remove = dplyr::intersect(existing_columns, unwanted_columns)
+  mapdata <- mapdata %>%
+    dplyr::select(-all_of(columns_to_remove))
+  
+  # Validate required columns
+  required_cols <- c("sitename", "lat", "long")
+  
+  # Identify time columns (all except the required ones)
+  time_cols <- setdiff(names(mapdata), required_cols)
+  if(length(time_cols) == 0) {
+    showNotification("No numerical columns found for time categories. Please include at least one time-based numerical column.", type = "error")
+    return(NULL)
+  }
+  
+  # Transform data into a format that can be used for the heatmap
+  mapdata <- mapdata %>%
+    tidyr::pivot_longer(cols = all_of(time_cols),
+                        names_to = "time", values_to =
+                          "value") %>%
+    tidyr::drop_na(value) %>%
+    dplyr::mutate(time = as.numeric(as.character(time))) %>%
+    dplyr::mutate(time = factor(time, levels = sort(unique(time)))) %>%
+    dplyr::mutate(value = as.numeric(value))
+  
+  
+  # Set data_loaded to TRUE after successful processing
+  data_loaded(TRUE)
+  return(mapdata)
+  }
+
+
 # Find dimensions of bounding box around study area
 find_bbox <- function(map_data) {
   
-  # Find original bounding box
+  # Draw original bounding box based on extremal sites
   coordinates = sf::st_as_sf(map_data, coords = c("long", "lat"), crs = 4326)
   bbox = sf::st_bbox(coordinates)
   
-  # set margin to 0.1 and find original height and width
+  # Set margin to 0.1 and find original height and width
   margin = 0.1
   width = bbox$xmax - bbox$xmin
   height = bbox$ymax - bbox$ymin
   
-  # adjust coordinates to accommodate margin
+  # Adjust coordinates to accommodate margin
   xmin = bbox$xmin - width * margin
   xmax = bbox$xmax + width * margin
   ymin = bbox$ymin - height * margin
   ymax = bbox$ymax + height * margin
   
-  # create new bounding box and convert so it can be recognized by ggplot2
+  # Create new bounding box and convert so it can be recognized by ggplot2
   bbox_coords = matrix(c(xmin, ymin,  # lower-left
                          xmax, ymin,  # lower-right
                          xmax, ymax,  # upper-right
                          xmin, ymax,  # upper-left
-                         xmin, ymin), # close the polygon
+                         xmin, ymin), # lower-left, close the polygon
                        ncol = 2, byrow = TRUE)
   bbox_polygon = sf::st_polygon(list(bbox_coords))
   bbox_sf = sf::st_sfc(bbox_polygon, crs = 4326)
   expanded_bbox <- sf::st_bbox(bbox_sf)
   
-  # finish function and return adjusted bounding box values
+  # Finish function and return adjusted bounding box values
   return(expanded_bbox)
-  }
-
-findMapData <- function(mapdata) {
-  
-  
 }
-
-
