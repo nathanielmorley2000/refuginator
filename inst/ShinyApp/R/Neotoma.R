@@ -1,10 +1,10 @@
-
 findNeotoma <- function(al_pollen, taxon, taxonReplace, timeBin, yearMin, yearMax, samplingProtocol) {
-  # download dataset -- may take some time
+  
+  # Download dataset -- may take some time
   al_dl = al_pollen %>% neotoma2::get_downloads(all_data = TRUE)
   allSamp = neotoma2::samples(al_dl)
 
-  # harmonize taxa based on user input
+  # Harmonize taxa based on user input
   allSamp = allSamp %>%
     dplyr::filter(ecologicalgroup %in% c("TRSH")) %>%
     dplyr::mutate(variablename = replace(variablename,
@@ -29,12 +29,12 @@ findNeotoma <- function(al_pollen, taxon, taxonReplace, timeBin, yearMin, yearMa
     dplyr::filter(variablename == taxon) %>%
     dplyr::select(sitename, lat, long, siteid, datasetid, value, age)
 
-  # create 500-yr time bins as a separate column
+  # Create time bins as a separate column
   timeCorrected = allSamp0 %>%
     dplyr::filter(age >= 0) %>%
     dplyr::mutate(Year_Bin = floor(age / timeBin) * timeBin)
 
-  # selects sample with smallest value (for specified taxon) in 500-year time bin
+  # Selects sample with smallest value (for specified taxon) in time bin
   if (samplingProtocol == "Minimum") {
     data_filtered = timeCorrected %>%
       dplyr::group_by(sitename, Year_Bin) %>%
@@ -43,7 +43,7 @@ findNeotoma <- function(al_pollen, taxon, taxonReplace, timeBin, yearMin, yearMa
       dplyr::filter(Year_Bin >= yearMin) %>%
       dplyr::filter(Year_Bin <= yearMax)
 
-  # selects sample with largest value (for specified taxon) in 500-year time bin
+  # Selects sample with largest value (for specified taxon) in time bin
   } else if (samplingProtocol == "Maximum") {
     data_filtered = timeCorrected %>%
       dplyr::group_by(sitename, Year_Bin) %>%
@@ -53,7 +53,7 @@ findNeotoma <- function(al_pollen, taxon, taxonReplace, timeBin, yearMin, yearMa
       dplyr::filter(Year_Bin <= yearMax)
   }
 
-  # creates pivot table with correctly ordered time bins
+  # Creates pivot table with correctly ordered time bins
   ordered_years = sort(unique(data_filtered$Year_Bin))
   pivot_table = data_filtered %>%
     dplyr::select(sitename, siteid, datasetid, lat, long, Year_Bin, value) %>%
@@ -62,10 +62,3 @@ findNeotoma <- function(al_pollen, taxon, taxonReplace, timeBin, yearMin, yearMa
 
   return(pivot_table)
 }
-
-
-
-# significance of going from >= 11 down to <= 5 for 7 time bins, then back up to >= 11
-
-
-
