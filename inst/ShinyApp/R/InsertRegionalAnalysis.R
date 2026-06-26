@@ -27,10 +27,6 @@ insertRegionalAnalysis <- function() {
                          tags$hr(),
                          h2("Animated Heat Map"),
                          img(src="animation.gif", height = 600, width = 800),
-                         #uiOutput("animated_plot"),
-                         #actionButton("play", "Play Animation"),
-                         #actionButton("pause", "Pause Animation"),
-                         #uiOutput("time_slider_ui"),
                          tags$hr(),
                          downloadButton("downloadAnimation", "Download Animation")
                        ))),
