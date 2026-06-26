@@ -1,13 +1,23 @@
 # define server logic for Refuginator 3,000
 server <- function(input, output, session) {
 
-  # define pipe operator for code
+  # Define pipe operator for code
   "%>%" <- dplyr::"%>%"
 
 # NEOTOMA DATABASE -------------------------------------------------------------
   
+  # Facilitate data harmonization in custom findNeotoma() function
+  taxonReplace <- reactive({
+    taxon = input$taxon
+    modified_taxon_name = paste0(taxon, ".*")
+    return(modified_taxon_name)
+  })
+  
+  
+  # Find and display sites using Neotoma search feature
   sites <- observeEvent(input$neotomaSearch, {
-    # check to make sure all fields are filled out
+    
+    # Check to make sure all fields are filled out
     if (is.na(input$xmin) ||
         is.na(input$xmax) ||
         is.na(input$ymin) ||
@@ -17,7 +27,7 @@ server <- function(input, output, session) {
         is.na(input$yearMax) ||
         is.na(input$yearMin)) {
 
-      # show a modal dialog if any input is missing
+      # Show a modal dialog if any input is missing
       shiny::showModal(modalDialog(
         title = "Input Error",
         "Please fill out all fields before proceeding.",
@@ -25,108 +35,103 @@ server <- function(input, output, session) {
         footer = NULL
       ))
 
-      # add JavaScript to refresh the page after closing the error message
+      # Add JavaScript to refresh the page after closing the error message
       shinyjs::runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
 
-    } else {
-      # define user inputs
-      xmin = input$xmin
-      xmax = input$xmax
-      ymin = input$ymin
-      ymax = input$ymax
-
-      # create bounding box from user inputs to make Neotoma API call
-      bbox_coords = matrix(c(xmin, ymin,  # lower-left
-                             xmax, ymin,  # lower-right
-                             xmax, ymax,  # upper-right
-                             xmin, ymax,  # upper-left
-                             xmin, ymin), # close the polygon
-                           ncol = 2, byrow = TRUE)
-      bbox_polygon = sf::st_polygon(list(bbox_coords))
-
-
-      # allows error messages to be displayed if API call is unsuccessful
-      tryCatch({
-
-        # make Neotoma API call to retrieve site metadata
-        al_sites = neotoma2::get_sites(loc = bbox_polygon, all_data = TRUE)
-        sites_summary = neotoma2::summary(al_sites)
-
-
-        # get datasets and filter to only include pollen data
-        al_datasets = neotoma2::get_datasets(al_sites, all_data = TRUE)
-        al_pollen = al_datasets %>%
-          neotoma2::filter(datasettype == "pollen" & !is.na(age_range_young))
-
-        if (is.null(al_pollen) || length(al_pollen) == 0) {
+      # Otherwise perform Neotoma search
+      } else {
+      
+        # Define user inputs
+        xmin = input$xmin
+        xmax = input$xmax
+        ymin = input$ymin
+        ymax = input$ymax
+  
+        # Create bounding box from user inputs to make Neotoma API call
+        bbox_coords = matrix(c(xmin, ymin,  # lower-left
+                               xmax, ymin,  # lower-right
+                               xmax, ymax,  # upper-right
+                               xmin, ymax,  # upper-left
+                               xmin, ymin), # lower-left to close the polygon
+                             ncol = 2, byrow = TRUE)
+        bbox_polygon = sf::st_polygon(list(bbox_coords))
+  
+        # Show error message if API call is unsuccessful
+        tryCatch({
+  
+          # Make Neotoma API call to retrieve site metadata
+          al_sites = neotoma2::get_sites(loc = bbox_polygon, all_data = TRUE)
+          sites_summary = neotoma2::summary(al_sites)
+  
+          # Get datasets and filter to only include pollen data
+          al_datasets = neotoma2::get_datasets(al_sites, all_data = TRUE)
+          al_pollen = al_datasets %>%
+            neotoma2::filter(datasettype == "pollen" & !is.na(age_range_young))
+  
           # If no sites are returned, show a modal with a specific message
-          shiny::showModal(modalDialog(
-            title = "No Sites Found",
-            "No sites were found for the given coordinates. Try different coordinates.",
-            easyClose = TRUE,
-            footer = NULL
-          ))
-
-          # add JavaScript to refresh the page after closing the error message
-          shinyjs::runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
-
-        } else {
-          # preview selected sites on the dashboard and give the option of changing before downloading data
-          output$sitePreview <- leaflet::renderLeaflet({
-            neotoma2::plotLeaflet(al_pollen) %>%
-              leaflet::addPolygons(map = .,
-                                   data = bbox_polygon,
-                                   color = "green") })
-        }
-      }, error = function(e) {
-        # If there is an error (e.g., connection fails), show a modal with the error message
-        shiny::showModal(modalDialog(
-          title = "API Connection Error",
-          paste("Failed to connect to the Neotoma API. Check your internet connection or try again later."),
-          easyClose = TRUE,
-          footer = NULL
-        ))
-
-        # add JavaScript to refresh the page after closing the error message
-        shinyjs::runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
-      })
-
-      neotomaData <- observeEvent(input$proceed, {
-        # define user input
-        taxon = input$taxon
-        taxonReplace = taxonReplace()
-        timeBin = input$timeBin
-        yearMin = input$yearMin
-        yearMax = input$yearMax
-        samplingProtocol = input$samplingProtocol
-
-        # custom function from functions.R file that downloads data and arranges it according to minimum sample approach
-        neotomaData <- findNeotoma(al_pollen, taxon, taxonReplace, timeBin, yearMin, yearMax, samplingProtocol)
-
-        # displays output on dashboard
-        output$neotomaTable <- shiny::renderTable({
-          neotomaData[1:10, 1:12]
+          if (is.null(al_pollen) || length(al_pollen) == 0) {
+            shiny::showModal(modalDialog(
+              title = "No Sites Found",
+              "No sites were found for the given coordinates. Try different coordinates.",
+              easyClose = TRUE,
+              footer = NULL))
+  
+            # Add JavaScript to refresh the page after closing the error message
+            shinyjs::runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
+  
+            # Preview selected sites on the dashboard and give the option of changing before downloading data
+            } else {
+              output$sitePreview <- leaflet::renderLeaflet({
+                neotoma2::plotLeaflet(al_pollen) %>%
+                  leaflet::addPolygons(map = .,
+                                       data = bbox_polygon,
+                                       color = "green") })
+              }
+          
+          # If there is an error (e.g., connection fails), show a modal with the error message
+          }, error = function(e) {
+            shiny::showModal(modalDialog(
+              title = "API Connection Error",
+              paste("Failed to connect to the Neotoma API. Check your internet connection or try again later."),
+              easyClose = TRUE,
+              footer = NULL))
+    
+            # Add JavaScript to refresh the page after closing the error message
+            shinyjs::runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
         })
-
-        # allows user to download data to their file directory
-        output$downloadNeotoma <- shiny::downloadHandler(
-          filename = function() {
-            paste("NeotomaData-", Sys.Date(), ".csv", sep = "")
-          },
-          content = function(file) {
-            write.csv(neotomaData, file, row.names = FALSE)
-          }
-        )
-      })
+  
+        # Download organized file
+        neotomaData <- observeEvent(input$proceed, {
+          
+          # Define user input
+          taxon = input$taxon
+          taxonReplace = taxonReplace()
+          timeBin = input$timeBin
+          yearMin = input$yearMin
+          yearMax = input$yearMax
+          samplingProtocol = input$samplingProtocol
+  
+          # Custom function from Neotoma.R file that downloads data and arranges it according to minimum or maximum sample approach
+          neotomaData <- findNeotoma(al_pollen, taxon, taxonReplace, timeBin, yearMin, yearMax, samplingProtocol)
+  
+          # Displays output on dashboard
+          output$neotomaTable <- shiny::renderTable({
+            neotomaData[1:10, 1:12]
+          })
+  
+          # Allows user to download data to their file directory
+          output$downloadNeotoma <- shiny::downloadHandler(
+            filename = function() {
+              paste("NeotomaData-", Sys.Date(), ".csv", sep = "")
+            },
+            content = function(file) {
+              write.csv(neotomaData, file, row.names = FALSE)
+            }
+          )
+        })
     }
   })
 
-  # needed for data harmonization in custom findNeotoma() function
-  taxonReplace <- reactive({
-    taxon = input$taxon
-    modified_taxon_name = paste0(taxon, ".*")
-    return(modified_taxon_name)
-  })
 
 
 # UPLOAD DATA ------------------------------------------------------------------
