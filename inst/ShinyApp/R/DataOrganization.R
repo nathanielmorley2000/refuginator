@@ -1,5 +1,8 @@
 # Data Organization ------------------------------------------------------------
 
+# Define pipe operator for code
+"%>%" <- dplyr::"%>%"
+
 # Custom function that summarizes number of localities with data and those with pollen for each time bin
 summarizeData <- function(data, control) {
   
