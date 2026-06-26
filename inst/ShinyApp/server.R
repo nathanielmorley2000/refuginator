@@ -183,7 +183,6 @@ server <- function(input, output, session) {
 
 
 
-  
 # DATA ORGANIZATION ------------------------------------------------------------
   
   # Reactive expression to transform the data
@@ -194,9 +193,9 @@ server <- function(input, output, session) {
     transformData(data)
   })
   
+  
   # Reactive expression to transform the data
   mapData <- reactive({
-    # define user input
     mapdata <- rawData()
     req(mapdata)
     
@@ -227,12 +226,12 @@ server <- function(input, output, session) {
   
 ## Regional Presence Plot ------------------------------------------------------
   
+  # Render interactive pplot with plotly package
   output$dataPlot <- plotly::renderPlotly({
-    # define necessary data
     req(transformedData())
     summary_long <- transformedData()
 
-    # create plot
+    # Create static plot with ggplot2
     p <- ggplot2:: ggplot(summary_long, ggplot2::aes(x = value, y = time, color = metric)) +
       ggplot2::geom_path(linewidth = 1) +
       ggplot2::labs(title = "Localities Data Over Time",
@@ -242,56 +241,61 @@ server <- function(input, output, session) {
       ggplot2::scale_y_reverse() +
       ggplot2::theme_classic()
 
-    # convert using plotly to make interactive
+    # Convert using plotly to make interactive
     plotly::ggplotly(p) %>%
       plotly::layout(hovermode = "x")
   })
 
+  
 
-## Spatial Monte Carlo ---------------------------------------------------------
+## Temporal Monte Carlo --------------------------------------------------------
+  
+  # Calculate spatial Monte Carlo test upon pressing button
   observeEvent(input$calcButton, {
-    # check to make sure all fields are filled out
+    
+    # Check all fields are filled out
     if (is.na(input$entry) ||
         is.na(input$decline) ||
         is.na(input$duration) ||
         is.na(input$nit)) {
 
-      # show a modal dialog if any input is missing
+      # If not, show a modal dialog if any input is missing
       shiny::showModal(modalDialog(
         title = "Input Error",
         "Please fill out all fields before proceeding.",
         easyClose = TRUE,
-        footer = NULL
-      ))
+        footer = NULL))
 
-    } else {
-      # define user inputs
-      entry = input$entry
-      decline = input$decline
-      duration = input$duration
-      nit = input$nit
-      rawData = rawData()
-
-      # remove siteid and datasetid columns, if present
-      unwanted_columns = c("siteid", "datasetid")
-      existing_columns = colnames(rawData)
-      columns_to_remove = dplyr::intersect(existing_columns, unwanted_columns)
-      rawData <- rawData %>%
-        dplyr::select(-all_of(columns_to_remove))
-
-      # custom function from DataOrganization.R file that summarizes number of localities with data and those with pollen for each time bin
-      summary = summarizeData(rawData)
-
-      # custom function from functions.R file that runs Monte Carlo simulation to resample curve and keeps track of "successful" iterations
-      score <- monteCarlo(entry, decline, duration, nit, summary)
-
-      # calculate realized p-value and display on ui
-      result = score/nit
-      output$calcResult <- renderText({
-        paste("The result of the calculation is:", result)
-      })
-    }
-  })
+      # Perform Monte Carlo test if all elements present
+      } else {
+      
+        # Define user inputs
+        entry = input$entry
+        decline = input$decline
+        duration = input$duration
+        nit = input$nit
+        rawData = rawData()
+  
+        # Remove siteid and datasetid columns, if present
+        unwanted_columns = c("siteid", "datasetid")
+        existing_columns = colnames(rawData)
+        columns_to_remove = dplyr::intersect(existing_columns, unwanted_columns)
+        rawData <- rawData %>%
+          dplyr::select(-all_of(columns_to_remove))
+  
+        # Custom function from DataOrganization.R file that summarizes number of localities with data and those with pollen for each time bin
+        summary = summarizeData(rawData)
+  
+        # custom function from MonteCarlo.R file that runs Monte Carlo simulation to resample curve and keeps track of "successful" iterations
+        score <- monteCarlo(entry, decline, duration, nit, summary)
+  
+        # Calculate realized p-value and display on ui
+        result = score/nit
+        output$calcResult <- renderText({
+          paste("The result of the calculation is:", result)
+        })
+        } 
+    })
 
 
 
