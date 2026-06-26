@@ -194,6 +194,16 @@ server <- function(input, output, session) {
     transformData(data)
   })
   
+  # Reactive expression to transform the data
+  mapData <- reactive({
+    # define user input
+    mapdata <- rawData()
+    req(mapdata)
+    
+    # Custom function from DataOrganization.R to transform data into a format that can be used for animations
+    findMapData(mapdata)
+  })
+  
   
   # Automatically draw bounding box with 10% margin around the datapoints
   expandedBBox <- reactive({
@@ -211,49 +221,6 @@ server <- function(input, output, session) {
     return(expanded_bbox_sfc)
   })
   
-  
-  # Validate required columns
-  required_cols <- c("sitename", "lat", "long")
-  
-  
-  # reactive expression to transform the data
-  mapData <- reactive({
-    # define user input
-    mapdata <- rawData()
-    req(mapdata)
-    
-    # remove siteid and datasetid columns, if present
-    unwanted_columns = c("siteid", "datasetid")
-    existing_columns = colnames(mapdata)
-    columns_to_remove = dplyr::intersect(existing_columns, unwanted_columns)
-    mapdata <- mapdata %>%
-      dplyr::select(-all_of(columns_to_remove))
-    
-    # Validate required columns
-    required_cols <- c("sitename", "lat", "long")
-    
-    # Identify time columns (all except the required ones)
-    time_cols <- setdiff(names(mapdata), required_cols)
-    if(length(time_cols) == 0) {
-      showNotification("No numerical columns found for time categories. Please include at least one time-based numerical column.", type = "error")
-      return(NULL)
-    }
-    
-    # transform data into a method that can
-    mapdata <- mapdata %>%
-      tidyr::pivot_longer(cols = all_of(time_cols),
-                          names_to = "time", values_to =
-                            "value") %>%
-      tidyr::drop_na(value) %>%
-      dplyr::mutate(time = as.numeric(as.character(time))) %>%
-      dplyr::mutate(time = factor(time, levels = sort(unique(time)))) %>%
-      dplyr::mutate(value = as.numeric(value))
-    
-    
-    # Set data_loaded to TRUE after successful processing
-    data_loaded(TRUE)
-    return(mapdata)
-  })
   
 
 # REGIONAL ANALYSIS ------------------------------------------------------------
@@ -312,7 +279,7 @@ server <- function(input, output, session) {
       rawData <- rawData %>%
         dplyr::select(-all_of(columns_to_remove))
 
-      # custom function from functions.R file that summarizes number of localities with data and those with pollen for each time bin
+      # custom function from DataOrganization.R file that summarizes number of localities with data and those with pollen for each time bin
       summary = summarizeData(rawData)
 
       # custom function from functions.R file that runs Monte Carlo simulation to resample curve and keeps track of "successful" iterations
