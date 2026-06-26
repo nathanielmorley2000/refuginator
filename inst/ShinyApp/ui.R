@@ -1,13 +1,15 @@
 # DEFINE USER INTERFACE --------------------------------------------------------
 ui <- fluidPage(
 
-  # initialize js integration
+  # Initialize js integration
   shinyjs::useShinyjs(),
 
-  # app title for head ---
+  
+  # App title for webpage head
   tags$head(HTML("<title>Identify Geohistorical Refugia with Refuginator</title>")),
 
-  # app title
+  
+  # App title bar
   titlePanel(h1("Refuginator",
   style={'background-color: #000000;
   margin-top: -20px;
@@ -16,7 +18,8 @@ ui <- fluidPage(
   padding-left: 20px;
 	color: #ffffff;'})),
 
-  # custom CSS using inline style to increase margins
+  
+  # Custom CSS using inline style to increase margins
   tags$style(HTML("
     #upload-data-tab {
       margin-left: 20px;
@@ -25,24 +28,25 @@ ui <- fluidPage(
     }
   ")),
 
-  # create multiple tabs with different inputs and outputs
+  
+  # Create multiple tabs with different inputs and outputs
   tabsetPanel(
     id = "main_tabs",
 
     ## Upload File page --------------------------------------------------------
     tabPanel("Upload Data",
 
-             # assign ID for styling
+             # Assign ID for styling
              div(id = "upload-data-tab",
 
-                 # show usage policy
+                 # Show usage policy
                  includeHTML("html/UsagePolicy.html"),
 
-                 # checkbox for agreeing to terms
+                 # Checkbox for agreeing to terms
                  checkboxInput("agree", "I agree to the Usage Policy", value = FALSE),
                  tags$hr(),
 
-                 # if checkbox clicked, show file upload
+                 # If checkbox clicked, show file upload
                  conditionalPanel(
                    condition = "input.agree == true",
                    fileInput("file1", "Choose CSV File",
@@ -51,17 +55,19 @@ ui <- fluidPage(
                                         "text/comma-separated-values,text/plain",
                                         ".csv")),
                    uiOutput("analyze_btn_ui")
-                  )
-             )
-    ),
+                   )             
+                 )    
+             ),
 
+    
     # "Regional Analysis" tab will be inserted here
 
+    
     ## Neotoma Database page ---------------------------------------------------
     tabPanel("Neotoma Pollen Database",
              sidebarLayout(
 
-               # sidebar panel for search terms
+               # Sidebar panel for search terms
                sidebarPanel(
                  h2("Search Neotoma"),
                  tags$div(style = "height: 10px;"),
@@ -84,9 +90,10 @@ ui <- fluidPage(
                  actionButton("neotomaSearch", "Search")
                ),
 
-               # main panel for displaying outputs
+               # Main panel for displaying outputs
                mainPanel(
-                 # sites preview
+                 
+                 # Sites preview
                  conditionalPanel(
                    condition = "input.neotomaSearch == false",
                    h2("Input Search Parameters")
@@ -98,14 +105,17 @@ ui <- fluidPage(
                    actionButton("proceed", "Proceed with Selection")
                  ),
                  tags$hr(),
-                 # transformed dataset preview
+                 
+                 
+                 # Transformed dataset preview
                  conditionalPanel(
                    condition = "input.proceed == true",
                    h2("Data Preview:"),
                    shinycssloaders::withSpinner(tableOutput("neotomaTable"), type = 6),
                    downloadButton("downloadNeotoma", "Download Data")
+                   )
                  )
                )
-             ))
+             )
+    )
   )
-)
