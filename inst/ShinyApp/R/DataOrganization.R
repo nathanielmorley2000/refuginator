@@ -132,10 +132,7 @@ findMapData <- function(mapdata) {
     dplyr::mutate(time = as.numeric(as.character(time))) %>%
     dplyr::mutate(time = factor(time, levels = sort(unique(time)))) %>%
     dplyr::mutate(value = as.numeric(value))
-  
-  
-  # Set data_loaded to TRUE after successful processing
-  data_loaded(TRUE)
+
   return(mapdata)
   }
 
