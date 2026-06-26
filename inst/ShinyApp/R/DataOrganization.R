@@ -1,15 +1,17 @@
 # Data Organization ------------------------------------------------------------
 
+# Custom function that summarizes number of localities with data and those with pollen for each time bin
 summarizeData <- function(data, control) {
   
-  # Perform your data transformation here using dplyr
+  # Transform data
   data = data %>%
     dplyr::select(!c("lat", "long")) %>%
     tidyr::pivot_longer(cols = -sitename, names_to = "time", values_to = "abundance")  # Replace COLUMN_NAME with actual column name
   
+  # Capture warnings during the mutate() step
   tryCatch({
-    # Capture warnings during the mutate() step
     withCallingHandlers({
+      
       # Handle rows where COLUMN_NAME could not be converted to numeric
       data = data %>%
         dplyr::group_by(time) %>%
@@ -24,29 +26,26 @@ summarizeData <- function(data, control) {
         ) %>%
         dplyr::arrange(time)
       return(data)
-    }, warning = function(w) {
+    
+      # Throw error message if extra columns are messing up calculations
+      }, warning = function(w) {
+        shiny::showModal(modalDialog(
+          title = "Error: Extra Columns Present",
+                                     "It seems that extra columns are present in your uploaded data. Please ensure only the required columns are included.",
+                                     easyClose = TRUE,
+                                     footer = NULL))
       
-      # throw error message if extra columns are messing up calculations
-      shiny::showModal(modalDialog(
-        title = "Error: Extra Columns Present",
-        "It seems that extra columns are present in your uploaded data. Please ensure only the required columns are included.",
-        easyClose = TRUE,
-        footer = NULL
-      ))
-      
-      # add JavaScript to refresh the page after closing the error message
+      # Add JavaScript to refresh the page after closing the error message
       shinyjs::runjs("$('#shiny-modal').on('hidden.bs.modal', function() { location.reload(); });")
       
       # Suppress the warning and stop further execution in this context
       invokeRestart("muffleWarning")
-      
-      control = FALSE
+      control = FALSE})
     })
-  })
   }
 
 
-# Transform input data sp regional presence plot can be drawn
+# Transform input data so regional presence plot can be drawn
 transformData <- function(data) {
   
   # Remove siteid and datasetid columns, if present
@@ -75,27 +74,26 @@ transformData <- function(data) {
     # Set control to "TRUE"
     control = TRUE
     
-    # custom function from functions.R file that summarizes number of localities with data and those with pollen for each time bin
+    # Custom function from DataOrganization.R file that summarizes number of localities with data and those with pollen for each time bin
     data = summarizeData(data, control)
     
     if (control == TRUE) {
-      # pivot to a long table that can be used for graphing
+      
+      # Pivot to a long table that can be used for graphing
       data = data %>%
         tidyr::pivot_longer(cols = c(localities_with_data, localities_with_pollen),
                             names_to = "metric", values_to = "value")
       return(data)
-    } else {
-      data = NULL
+    
+      # Fail condition if unsuccessful
+      } else {
+        data = NULL
+      }
     }
   }
-  }
 
 
 
-findMapData <- function(mapdata) {
-  
-  
-}
 
 
 
@@ -137,5 +135,9 @@ find_bbox <- function(map_data) {
   return(expanded_bbox)
   }
 
+findMapData <- function(mapdata) {
+  
+  
+}
 
 
