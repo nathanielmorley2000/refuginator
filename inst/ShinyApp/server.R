@@ -139,10 +139,6 @@ server <- function(input, output, session) {
     return(!is.null(rawData()))
   })
   outputOptions(output, "fileUploaded", suspendWhenHidden = FALSE)
-  
-  
-  # Reactive value to track if data is loaded
-  #data_loaded <- reactiveVal(FALSE)
 
   
   # Reactive expression to read the uploaded file
@@ -301,27 +297,6 @@ server <- function(input, output, session) {
 
 
 ## Display static animations ---------------------------------------------------
-
-### UI Output ------------------------------------------------------------------
-  
- # data_loaded <- reactiveVal(FALSE)
-  
-  # Render plot UI with conditional spinner
-#  output$plot_ui <- renderUI({
-#    withSpinner(plotOutput("animated_plot", height = "700px"))
-#    # Data is loading; show spinner
-#    if (!data_loaded()) {
-#      withSpinner(plotOutput("animated_plot", height = "700px"))
-#    
-#      # Otherwise show plot
-#      } else {
-#      plotOutput("animated_plot", height = "700px")
-#    }
-#  }) 
-  
-
-  
-### Plot Map -------------------------------------------------------------------
   
   # Render the animation and provide a download option
   observeEvent(input$analyze_btn, {
@@ -350,7 +325,6 @@ server <- function(input, output, session) {
     # Create static heatmap animation using StaticHeatmaps.R
     map_with_animation <- staticHeatmap(map_data, expanded_bbox, expanded_bbox_sfc, countries, timebins)
     
-    #data_loaded(TRUE)
     # Save animation as GIF
     num_years <- length(timebins)
     dir.create("inst/shinyApp/www/")
@@ -408,5 +382,4 @@ server <- function(input, output, session) {
                                                                 height = 1200,
                                                                 res = 150))
     })
-
   }
