@@ -2,7 +2,7 @@
 #'
 #' @param defaultbrowser Choose whether to launch the application in your default browser.
 #'
-#' @return Launches Refuginator application in your browser. All features are contained within the application.
+#' @return Launches Refuginator application in your browser. All features are contained within the application. Read the "refuginatorIntro" vignette for a guide to the features.
 #' @export
 #'
 #' @examples \dontrun{launchRefuginator()}

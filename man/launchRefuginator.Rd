@@ -10,7 +10,7 @@ launchRefuginator(defaultbrowser = TRUE)
 \item{defaultbrowser}{Choose whether to launch the application in your default browser.}
 }
 \value{
-Launches Refuginator application in your browser. All features are contained within the application.
+Launches Refuginator application in your browser. All features are contained within the application. Read the "refuginatorIntro" vignette for a guide to the features.
 }
 \description{
 Launch the Refuginator Application in your Browser
