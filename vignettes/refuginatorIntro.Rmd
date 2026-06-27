@@ -18,86 +18,101 @@ The Refuginator is a dashboard designed to facilitate the identification of hist
 
 ## Sections
 
-* [Getting Started]
-* [Upload Data]
-* [Regional Analysis]
-  * [Regional Presence Plot]
-  * [Geospatial Heat Map]
-  * [Monte Carlo Analysis]
-* [Neotoma Pollen Database]
-  * [Search Parameters]
-  * [Interface Instructions]
-  * [Neotoma Usage Policy]
-* [References]
-
+-   [Getting Started]
+-   [Upload Data]
+-   [Regional Analysis]
+    -   [Regional Presence Plot]
+    -   [Geospatial Heat Map]
+    -   [Monte Carlo Analysis]
+-   [Neotoma Pollen Database]
+    -   [Search Parameters]
+    -   [Interface Instructions]
+    -   [Neotoma Usage Policy]
+-   [References]
 
 ## Getting Started
 
 Users can install the `refuginator` package from CRAN with the command:\
 \
+
 ```{r, eval = FALSE}
 install.packages("refuginator")
 ```
+
 \
 Once the package is installed, users can then launch the Refuginator dashboard by attaching the `refuginator` package and using the `launchRefuginator()` command:\
 \
+
 ```{r, eval = FALSE}
 library(refuginator)
 launchRefuginator()
 ```
+
 \
 Or, if users prefer to attach the package directly in the function's namespace:\
 \
+
 ```{r, eval = FALSE}
 refuginator::launchRefuginator()
 ```
+
 \
 
 ## Upload Data
 
 Upon launching the dashboard, users will be directed to the "Upload Data" tab. This page shows users the usage policy for the Refuginator and explains the correct attribution for this application.\
 \
+
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig01_LandingPage.png")
 cap = "**Figure 1**. Refuginator landing page."
 ```
+
 \
 After agreeing to the usage policy, a button will appear that allows users to upload their dataset:\
 \
+
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig02_UploadData.png")
 cap = "**Figure 2**. Agreeing to the Usage Policy allows users to upload their data."
 ```
+
 \
 Users can upload custom geospatial data as CSV files for regional analysis. The spreadsheets must be formatted to contain the following columns:
 
-* *sitename* – the name of the site
-* *lat* – the latitude for the site
-* *long* – the longitude for the site
-*  Proceeding columns must be numerical dates and should increase in regular increments (e.g., 0, 500, 1000, 1500). 
+-   *sitename* – the name of the site
+-   *lat* – the latitude for the site
+-   *long* – the longitude for the site
+-   Proceeding columns must be numerical dates and should increase in regular increments (e.g., 0, 500, 1000, 1500).
 
 Each entry should show the number of specimens for the user's taxon of interest in a given locality for the corresponding time interval. Entries for which data are unavailable should be left blank; entries for which data are available but lack examples of the user's taxon of interest should be marked as "0."\
 \
 An example of the formatting required for a custom geospatial dataset is shown below:\
 \
+
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig03_DataExampleNoID.png")
 cap = "**Figure 3**. Example dataset with the *sitename*, *latitude*, and *longitude* columns."
 ```
+
 \
 Data downloaded from the [Neotoma Pollen Database] feature of the Refuginator will contain two extra columns (*siteid* and *datasetid*) following the *sitename* column. These columns provide information for users to help fulfill the Neotoma Database’s Usage Policy. Spreadsheets with the *siteid* and *datasetid* column can be uploaded directly to the Refuginator for analysis. An example of the formatting required for a ready-to-use Neotoma dataset can be found below:\
 \
+
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig04_DataExampleWithID.png")
 cap = "**Figure 4**. Example dataset including the *siteid* and *datasetid* columns."
 ```
+
 \
 After uploading the data, a button marked "Analyze" will appear. Clicking this button will launch a separate tab on the application where the analysis will take place.\
 \
+
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig05_AnalyzeButton.png")
 cap = "**Figure 5**. Once the data is uploaded, the Analyze button will appear."
 ```
+
 \
 
 ## Regional Analysis
@@ -108,17 +123,21 @@ After clicking the "Analyze" button on the [Upload Data] tab, users will be dire
 
 At the top of the main panel in the [Regional Analysis] section is the Regional Presence Plot. The red line, marked "localities_with_data," shows the the number of sites with data in the user's study area in a given time bin; the blue line, marked "localities_with_specimens," shows the number of sites where the user's taxon if interest is present.\
 \
+
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig06_RegionalPresencePlot.png")
 cap = "**Figure 6**. At the top of the main panel in the Regional Analysis tab is the Regional Presence Plot."
 ```
+
 \
 The regional presence plot is rendered with the `plotly` package, allowing users to interact with the plot using the toolbar on the upper right corner of the plot. By default, the "Compare data on hover" tool is selected, but I recommend that users click the "Show closest data on hover" tool. This allows users to see exactly how many sites have their taxon present at a given time.\
 \
+
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig07_DataInteraction.png")
 cap = "**Figure 7**. Users can interact with the data using the toolbar in the upper right corner of the plot."
 ```
+
 \
 Users can also download the plot as a .png file using the "Download plot as a png" tool.\
 \
@@ -127,76 +146,89 @@ Users can also download the plot as a .png file using the "Download plot as a pn
 
 At the bottom of the main panel in the [Regional Analysis] section is the Animated Heat Map. This animation shows how taxon abundance changes through time from site-to-site.\
 \
+
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig08_AnimatedHeatMap.png")
 cap = "**Figure 8**. At the bottom of the main panel in the Regional Analysis tab is Animated Heat Map."
 ```
+
 \
 Pressing the "Play Animation" button should start the animation, moving from the oldest time interval to the youngest time interval. The "Pause Animation" button should stop the animation. Once paused, users can use the "Select Time" bar to skip forward or backward in the sequence. Users can press the "Download Animation" button if they want to save a .gif of their animated heatmap.\
 \
+
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig09_HeatMapInteractions.png")
 cap = "**Figure 9**. The buttons beneath the heat map allow the user to interact with it."
 ```
+
 \
 
 ### Monte Carlo Analysis
 
 The sidebar on the [Regional Analysis] tab contains the inputs and outputs for the Monte Carlo analysis. To do this, users must input:
 
-* **Entry Presence.** The presence at which the localities with data and the localities with specimens begin to diverge.
-* **Decline Presence.** The maximum presence at which the the localities with specimen occurs during the decline interval. *e.g., If decline presence = 5, the presence would be 5 or less for the duration of the decline*
-* **Duration of Decline.** How many time bins the decline lasts before re-expanding past the decline presence.
-* **Number of Iterations.** How many iterations users want to run for the Monte Carlo analysis. Typically values of 10,000 or 100,000 are sufficient.\
-\
+-   **Entry Presence.** The presence at which the localities with data and the localities with specimens begin to diverge.
+-   **Decline Presence.** The maximum presence at which the the localities with specimen occurs during the decline interval. *e.g., If decline presence = 5, the presence would be 5 or less for the duration of the decline*
+-   **Duration of Decline.** How many time bins the decline lasts before re-expanding past the decline presence.
+-   **Number of Iterations.** How many iterations users want to run for the Monte Carlo analysis. Typically values of 10,000 or 100,000 are sufficient.\
+    \
+
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig10_MonteCarloSidebar.png")
 cap = "**Figure 10**. The sidebar of the Regional Analysis tab contains the inputs for the Monte Carlo Analysis."
 ```
+
 \
 After users press the "Calculate" button, the Refuginator will provide a realized p-value.\
 \
+
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig11_PValue.png")
 cap = "**Figure 11**. After inputting all of the values, clicking the Calculate button will show the realized p-value."
 ```
+
 \
 
 ## Neotoma Pollen Database
 
 If users navigate to the [Neotoma Pollen Database] tab, they will be able to preview and extract pollen core data from the online Neotoma database (Williams, Grimm, et al. 2018) using the `neotoma2` package.\
 \
+
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig12_NeotomaTab.png")
 cap = "**Figure 12**. Default Neotoma Pollen Database tab"
 ```
+
 \
 
 ### Search Parameters
 
 To extract data from the Neotoma database, users are required to enter the following search parameters into the sidebar:
 
-* **Coordinates.** The algorithm will search for pollen cores within a bounding box defined by the coordinates parameters. The *Western Longitude* and *Eastern Longitude* define the longitudinal axis, while the *Southern Latitude* and *Northern Latitude* define the latitudinal axis.
-* **Taxon of Interest.** The algorithm will filter data from select cores to only include pollen data based on the user's taxon of interest. When searching for the user's desired taxon, the dashboard will collapse any lower-level taxa into the user's taxon of interest. (*e.g., If a user searches for the genus Picea, any species-level results within that search term, such as* Picea glauca *or* Picea mariana*, will be lumped together*). It is generally recommended that searches are limited to the generic level (see Morley et al., IN REVIEW).
-* **Time Parameters.** The algorithm will sort pollen data into the selected time parameters. The *Beginning of Interval* defines the start of the study interval, while the *End of Interval* defines the end of the study interval. Both of these values should be written in units of ya, or "years ago." (*e.g., A study interval of 20 ka–Present would be input as *Beginning of Interval = 20000 *and* End of Interval = 0). The *Time Bin* parameter defines to the temporal resolution of the study (*e.g., one datapoint for every 500 years*). The *Sampling Protocol* defines how the data are sorted into time bins: the "Minimum" selects the lowest abundance in the time bin as the representative datapoint, while the "Maximum" selects the greatest abundance in the time bin as the representative datapoint (see Morley et al., IN REVIEW for more information on these two protocols).\
-\
-
+-   **Coordinates.** The algorithm will search for pollen cores within a bounding box defined by the coordinates parameters. The *Western Longitude* and *Eastern Longitude* define the longitudinal axis, while the *Southern Latitude* and *Northern Latitude* define the latitudinal axis.
+-   **Taxon of Interest.** The algorithm will filter data from select cores to only include pollen data based on the user's taxon of interest. When searching for the user's desired taxon, the dashboard will collapse any lower-level taxa into the user's taxon of interest. (*e.g., If a user searches for the genus Picea, any species-level results within that search term, such as* Picea glauca *or* Picea mariana*, will be lumped together*). It is generally recommended that searches are limited to the generic level (see Morley et al., IN REVIEW).
+-   **Time Parameters.** The algorithm will sort pollen data into the selected time parameters. The *Beginning of Interval* defines the start of the study interval, while the *End of Interval* defines the end of the study interval. Both of these values should be written in units of ya, or "years ago." (*e.g., A study interval of 20 ka–Present would be input as* Beginning of Interval = 20000 *and* End of Interval = 0). The *Time Bin* parameter defines to the temporal resolution of the study (*e.g., one datapoint for every 500 years*). The *Sampling Protocol* defines how the data are sorted into time bins: the "Minimum" selects the lowest abundance in the time bin as the representative datapoint, while the "Maximum" selects the greatest abundance in the time bin as the representative datapoint (see Morley et al., IN REVIEW for more information on these two protocols).\
+    \
 
 ### Interface Instructions
 
 After users input their search parameters, the Refuginator will display a preview of all of the pollen cores identified in the study area, including cores where the user's taxon is absent. Given the size of many Neotoma datasets, this allows users to check their selection's metadata without devoting too much computing power to retrieve the data itself; however, this can still take some time, depending on factors such as search size and internet speed. At this point, users will be given the opportunity to proceed with the extraction or input new search parameters.\
 \
+
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig13_NeotomaPreview.png")
 cap = "**Figure 13**. After clicking the Search button, users will be shown a preview of the selected sites."
 ```
+
 \
 If the user proceeds with the selection, the dashboard will download the data for their selected cores and filter the data to only include pollen data based on their selected taxonomic and temporal parameters. A snippet of the resultant spreadsheet will be displayed on the dashboard with all of the information necessary for citing the individual cores from the Neotoma database. From here, users can download the full spreadsheet as a CSV file. This CSV file can subsequently be uploaded directly under the [Upload Data] tab for analysis, or users can further modify it based on the requirements for their project.\
 \
+
 ```{r echo=FALSE, out.width = "90%", fig.cap = cap}
 knitr::include_graphics("Figures/Fig14_NeotomaDownload.png")
 cap = "**Figure 14**. After clicking the Proceed with Download button, users will be given a preview of the data, filtered according to their inputs. Pressing the Download Data button will download a CSV file onto the user's machine that can be uploaded on the [Upload Data] tab."
 ```
+
 \
 
 ### Neotoma Usage Policy
@@ -204,9 +236,8 @@ cap = "**Figure 14**. After clicking the Proceed with Download button, users wil
 The Neotoma Paleoecology Database (Williams, Grimm et al., 2018) is licensed under a CC BY 4.0 license. Users are free to use data from the Neotoma database, including from the Neotoma Pollen Database functionality of this dashboard, provided they abide by Neotoma's data use and embargo policy. The creators of the Refuginator dashboard will not be held responsible for any violations or abuses of this policy.\
 \
 
-
 ## References
 
-Morley, N. E. D., Schneider, C. L., Cahill Jr., J. F., Sullivan, C., Leighton, L. R. [IN REVIEW]. Ice age refugium shows potential of geohistorical data to guide modern conservation efforts. *Proceedings of the National Academy of Sciences of the United States of America.* 
+Morley NED, Schneider CL, Cahill Jr. JF, Sullivan C, Leighton LR. 2026. Geohistorical data reveal an ice age refugium with implications for modern conservation. Commun Earth Environ. [published online ahead of print]. <https://doi.org/10.1038/s43247-026-03563-3>
 
-Williams, J. W., Grimm, E. C., Blois, J. L., Charles, D. F., Davis, E. B., Goring, S. J., Graham, R. W., Smith, A. J., Anderson, M., Arroyo-Cabrales, J., Ashworth, A. C., Betancourt, J. L., Bills, B. W., Booth, R. K., Buckland, P. I., Curry, B. B., Giesecke, T., Jackson, S. T., Latorre, C., … Takahara, H. (2018). The Neotoma Paleoecology Database, a multiproxy, international, community-curated data resource. *Quaternary Research*, 89(1), 156–177. https://doi.org/10.1017/qua.2017.105
+Williams JW et al. 2018. The Neotoma Paleoecology Database, a multiproxy, international, community-curated data resource. Quat Res. 89(1):156–177. <https://doi.org/10.1017/qua.2017.105>
