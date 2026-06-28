@@ -20,7 +20,7 @@ The in-development version of the `refuginator` package can be directly download
 
 The refuginator application be launched by typing the following command into your `R` console:
 
-`refuginator::launchRefuginator`
+`refuginator::launchRefuginator()`
 
 Further instructions regarding use can be found in the "refuginatorIntro" vignette. 
 
