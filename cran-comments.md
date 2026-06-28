@@ -20,4 +20,4 @@
 
 ## revdepcheck results
 
-This is a new release, and there are no packages with reverse dependencies.
+This is a new release, so there are no packages with reverse dependencies.
