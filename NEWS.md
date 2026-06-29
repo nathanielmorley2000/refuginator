@@ -1,4 +1,4 @@
-# refuginator 1.0.0
+# refuginator 0.1.0
 
 * Initial CRAN submission.
 * User can upload geospatial dataset and generate regional presence plot and animated heat maps.
