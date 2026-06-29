@@ -29,3 +29,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: https://github.com/nathanielmorley2000/refuginator
+BugReports: https://github.com/nathanielmorley2000/refuginator/issues
