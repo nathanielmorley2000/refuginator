@@ -1,3 +1,5 @@
+# refuginator 1.0.0
+
 # refuginator 0.1.0
 
 * Initial CRAN submission.
