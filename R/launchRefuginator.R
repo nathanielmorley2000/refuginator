@@ -5,7 +5,10 @@
 #' @return Launches Refuginator application in your browser. All features are contained within the application. Read the "refuginatorIntro" vignette for a guide to the features.
 #' @export
 #'
-#' @examples \dontrun{launchRefuginator()}
+#' @examples 
+#' if (interactive()) {
+#'   launchRefuginator()
+#' }
 #' 
 
 

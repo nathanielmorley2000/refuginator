@@ -16,6 +16,8 @@ Launches Refuginator application in your browser. All features are contained wit
 Launch the Refuginator Application in your Browser
 }
 \examples{
-\dontrun{launchRefuginator()}
+if (interactive()) {
+  launchRefuginator()
+}
 
 }
