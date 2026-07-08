@@ -298,7 +298,11 @@ server <- function(input, output, session) {
 
 ## Display static animations ---------------------------------------------------
   
-  # Render the animation and provide a download option
+  # Reactive value to hold temporary path for GIF 
+  gif_path <- reactiveVal(NULL)
+  
+  
+  # Generate animation upon pressing "Analyze" button
   observeEvent(input$analyze_btn, {
     
     # Download notification
@@ -325,17 +329,38 @@ server <- function(input, output, session) {
     # Create static heatmap animation using StaticHeatmaps.R
     map_with_animation <- staticHeatmap(map_data, expanded_bbox, expanded_bbox_sfc, countries, timebins)
     
+    # Create temporary filepath for GIF
+    temp_gif <- tempfile(fileext = ".gif")
+    
     # Save animation as GIF
     num_years <- length(timebins)
-    dir.create("inst/shinyApp/www/", showWarnings = FALSE)
-    gganimate::anim_save("www/animation.gif", animation = gganimate::animate(map_with_animation,
-                                                                                            nframes = num_years,
-                                                                                            fps = 1.5,
-                                                                                            width = 1600,
-                                                                                            height = 1200,
-                                                                                            res = 150))
+    gganimate::anim_save(temp_gif, animation = gganimate::animate(map_with_animation,
+                                                                  nframes = num_years,
+                                                                  fps = 1.5,
+                                                                  width = 1600,
+                                                                  height = 1200,
+                                                                  res = 150))
+    
+    # Update reactive value with temporary filepath for GIF
+    gif_path(temp_gif)
   })
 
+  
+  # Display GIF
+  output$static_animation <- renderImage({
+    
+    # Only display after animation rendered
+    req(gif_path)
+    
+    # Image specs
+    list(
+      src = gif_path(),
+      contentType = 'image/gif',
+      width = 500,
+      height = 400
+    )
+  }, deleteFile = FALSE)
+  
 
 
 ## Download Animation ----------------------------------------------------------

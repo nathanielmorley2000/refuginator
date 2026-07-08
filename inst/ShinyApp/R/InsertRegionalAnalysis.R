@@ -26,7 +26,7 @@ insertRegionalAnalysis <- function() {
                          shinycssloaders::withSpinner(plotly::plotlyOutput("dataPlot"), type = 6),
                          tags$hr(),
                          h2("Animated Heat Map"),
-                         img(src="animation.gif", height = 600, width = 800),
+                         imageOutput("static_animation"),
                          tags$hr(),
                          downloadButton("downloadAnimation", "Download Animation")
                        ))),
