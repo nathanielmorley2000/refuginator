@@ -4,8 +4,8 @@ bibentry(
   author = "Nathaniel E. D. Morley and Chris L. Schneider and James F. Cahill and Corwin Sullivan and Lindsey Leighton",
   journal = "Communications Earth & Environment",
   year = "2026",
-  #volume = ,
+  volume = 7,
   #number = ,
-  #pages = ,
+  pages = 704,
   doi = "10.1038/s43247-026-03563-3"
 )
