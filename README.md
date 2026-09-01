@@ -1,8 +1,12 @@
 # refuginator: An Interactive Tool for Identifying Refugia
 
-The Refuginator is a user-friendly browser application designed to help researchers identify historical or geohistorical refugia using the protocol described by [Morley 
-et al., 2026, *Communications Earth & Environment*](https://doi.org/10.1038/s43247-026-03563-3). The `refuginator` package allows users to run the Refuginator dashboard 
-locally through `R`.
+The Refuginator is a user-friendly browser application designed to help researchers identify historical or geohistorical refugia using the protocol described by:
+
+Morley, N.E.D., Schneider, C.L., Cahill, J.F., Sullivan, C., Leighton, L.R. Geohistorical data reveal an 
+ice age refugium with implications for modern conservation. *Commun Earth Environ* **7**, 704 (2026). 
+[https://doi.org/10.1038/s43247-026-03563-3](https://doi.org/10.1038/s43247-026-03563-3).
+
+The `refuginator` package allows users to run the Refuginator dashboard locally through `R`.
 
 
 ### Installation
