@@ -11,7 +11,7 @@ The `refuginator` package allows users to run the Refuginator dashboard locally 
 
 ### Installation
 
-The most recent stable version of the `refuginator` package can be downloaded from the Comprehesnive R Archive Network (CRAN) using the following command:
+The most recent stable version of the `refuginator` package can be downloaded from the Comprehensive R Archive Network (CRAN) using the following command:
 
 `install.packages("refuginator")`
 
