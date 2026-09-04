@@ -40,7 +40,25 @@ ui <- shiny::fluidPage(
              shiny::div(id = "upload-data-tab",
 
                  # Show usage policy
-                # shiny::includeHTML("html/UsagePolicy.html"),
+                shiny::tags$h1("Usage Policy"),
+                shiny::tags$p(shiny::tags$h3("Refuginator: An Interactive Tool for Identifying Refugia"), "Copyright (C) 2026  Nathaniel E.D. Morley"),
+                shiny::tags$p("This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful,
+                              but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see", shiny::tags$a("http://www.gnu.org/licenses/.", href = "http://www.gnu.org/licenses/")),
+                shiny::tags$p("Source code is available", shiny::tags$a("here.", href = "https://github.com/nathanielmorley2000/refuginator")),
+                shiny::tags$h3("Attribution"),
+                shiny::tags$p("An attribution consists of a citation to the theoretical background presented by Morley et al. (2026) for identifying refugia.  Please use the following citation as a guideline when formatting the bibliographic entry for this application:"),
+                shiny::tags$p("Morley NED, Schneider CL, Cahill JF, Sullivan C, Leighton LR. 2026. Geohistorical data reveal an ice age refugium with implications for modern conservation. Commun Earth Environ. 7:704.", shiny::tags$a("https://doi.org/10.1038/s43247-026-03563-3.", href = "https://doi.org/10.1038/s43247-026-03563-3")),
+                shiny::tags$h3("Neotoma Pollen Database"),
+                shiny::tags$p("The Neotoma Paleoecology Database (Williams, Grimm et al., 2018) is licensed under a", shiny::tags$a("CC BY 4.0 license", href = "https://creativecommons.org/licenses/by/4.0/deed.en"),
+                              "Users are free to use data from the Neotoma database, including from the", shiny::tags$b("Neotoma Pollen Database"), "functionality of this dashboard, provided they abide by Neotoma's",
+                              shiny::tags$a("data use and embargo policy.", href = "https://www.neotomadb.org/data/data-use-and-embargo-policy"), " The creators of the Refuginator dashboard will not be held responsible for any violations or abuses of this policy."),
+                shiny::tags$p("Williams JW, Grimm EC, et al. 2018. The Neotoma Paleoecology Database, a multiproxy, international, community-curated data resource. Quat Res. 89(1):156-177.", shiny::tags$a("https://doi.org/10.1017/qua.2017.105", href = "https://doi.org/10.1017/qua.2017.105")),
+                shiny::tags$br(),
+                shiny::tags$p(shiny::tags$b("By clicking the box below, users agree to abide by the Refuginator's Usage Policy.")),
+                
+                
+                 #shiny::tags$iframe(src = "UsagePolicy.html", width = "100%", height = "600px"),
+                  #shiny::includeHTML(system.file("html/UsagePolicy.html", package = "refuginator")),
 
                  # Checkbox for agreeing to terms
                  shiny::checkboxInput("agree", "I agree to the Usage Policy", value = FALSE),
