@@ -1,4 +1,4 @@
-server <- function(input, output, session) {
+app_server <- function(input, output, session) {
 
 # NEOTOMA DATABASE -------------------------------------------------------------
   
