@@ -52,7 +52,7 @@ ui <- shiny::fluidPage(
                 shiny::tags$p("The Neotoma Paleoecology Database (Williams, Grimm et al., 2018) is licensed under a", shiny::tags$a("CC BY 4.0 license", href = "https://creativecommons.org/licenses/by/4.0/deed.en"),
                               "Users are free to use data from the Neotoma database, including from the", shiny::tags$b("Neotoma Pollen Database"), "functionality of this dashboard, provided they abide by Neotoma's",
                               shiny::tags$a("data use and embargo policy.", href = "https://www.neotomadb.org/data/data-use-and-embargo-policy"), " The creators of the Refuginator dashboard will not be held responsible for any violations or abuses of this policy."),
-                shiny::tags$p("Williams JW, Grimm EC, et al. 2018. The Neotoma Paleoecology Database, a multiproxy, international, community-curated data resource. Quat Res. 89(1):156-177.", shiny::tags$a("https://doi.org/10.1017/qua.2017.105", href = "https://doi.org/10.1017/qua.2017.105")),
+                shiny::tags$p("Williams JW, Grimm EC, et al. 2018. The Neotoma Paleoecology Database, a multiproxy, international, community-curated data resource. Quat Res. 89(1):156-177.", shiny::tags$a("https://doi.org/10.1017/qua.2017.105.", href = "https://doi.org/10.1017/qua.2017.105")),
                 shiny::tags$br(),
                 shiny::tags$p(shiny::tags$b("By clicking the box below, users agree to abide by the Refuginator's Usage Policy.")),
                 
