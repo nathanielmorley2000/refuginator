@@ -58,7 +58,7 @@ findNeotoma <- function(al_pollen, taxon, taxonReplace, timeBin, yearMin, yearMa
   pivot_table = data_filtered %>%
     dplyr::select(sitename, siteid, datasetid, lat, long, Year_Bin, value) %>%
     tidyr::pivot_wider(names_from = Year_Bin, values_from = value, values_fill = list(Taxon_Abundance = NA)) %>%
-    dplyr::select(sitename, siteid, datasetid, lat, long, all_of(as.character(ordered_years)))
+    dplyr::select(sitename, siteid, datasetid, lat, long, tidyr::all_of(as.character(ordered_years)))
 
   return(pivot_table)
 }
