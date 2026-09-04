@@ -121,7 +121,7 @@ server <- function(input, output, session) {
               paste("NeotomaData-", Sys.Date(), ".csv", sep = "")
             },
             content = function(file) {
-              write.csv(neotomaData, file, row.names = FALSE)
+              utils::write.csv(neotomaData, file, row.names = FALSE)
             }
           )
         })
@@ -145,7 +145,7 @@ server <- function(input, output, session) {
   rawData <- reactive({
     req(input$file1)
     inFile <- input$file1
-    rawdata <- read.csv(inFile$datapath, header = TRUE, sep = ",", quote = '"', check.names = FALSE)
+    rawdata <- utils::read.csv(inFile$datapath, header = TRUE, sep = ",", quote = '"', check.names = FALSE)
     return(rawdata)
   })
 
