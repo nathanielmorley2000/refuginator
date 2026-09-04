@@ -32,7 +32,7 @@ summarizeData <- function(data, control) {
     
       # Throw error message if extra columns are messing up calculations
       }, warning = function(w) {
-        shiny::showModal(modalDialog(
+        shiny::showModal(shiny::modalDialog(
           title = "Error: Extra Columns Present",
                                      "It seems that extra columns are present in your uploaded data. Please ensure only the required columns are included.",
                                      easyClose = TRUE,
@@ -56,13 +56,13 @@ transformData <- function(data) {
   existing_columns = colnames(data)
   columns_to_remove = dplyr::intersect(existing_columns, unwanted_columns)
   data = data %>%
-    dplyr::select(-all_of(columns_to_remove))
+    dplyr::select(-tidyr::all_of(columns_to_remove))
   
   # Check if the first three columns are correct
   expected_initial_columns <- c("sitename", "lat", "long")
   uploaded_columns <- colnames(data)
   if (!all(expected_initial_columns == uploaded_columns[1:3])) {
-    shiny::showModal(modalDialog(
+    shiny::showModal(shiny::modalDialog(
       title = "Error: Invalid Columns",
       "If using custom data, the first three columns must be 'sitename', 'lat', and 'long'.",
       easyClose = TRUE,
@@ -111,7 +111,7 @@ findMapData <- function(mapdata) {
   existing_columns = colnames(mapdata)
   columns_to_remove = dplyr::intersect(existing_columns, unwanted_columns)
   mapdata <- mapdata %>%
-    dplyr::select(-all_of(columns_to_remove))
+    dplyr::select(-tidyr::all_of(columns_to_remove))
   
   # Validate required columns
   required_cols <- c("sitename", "lat", "long")
@@ -119,13 +119,13 @@ findMapData <- function(mapdata) {
   # Identify time columns (all except the required ones)
   time_cols <- setdiff(names(mapdata), required_cols)
   if(length(time_cols) == 0) {
-    showNotification("No numerical columns found for time categories. Please include at least one time-based numerical column.", type = "error")
+    shiny::showNotification("No numerical columns found for time categories. Please include at least one time-based numerical column.", type = "error")
     return(NULL)
   }
   
   # Transform data into a format that can be used for the heatmap
   mapdata <- mapdata %>%
-    tidyr::pivot_longer(cols = all_of(time_cols),
+    tidyr::pivot_longer(cols = tidyr::all_of(time_cols),
                         names_to = "time", values_to =
                           "value") %>%
     tidyr::drop_na(value) %>%
