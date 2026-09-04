@@ -30,6 +30,41 @@ saved to temporary directories.
     
     
 * checking R code for possible problems ... NOTE
+  app_server: no visible global function definition for 'reactive'
+  app_server: no visible global function definition for 'observeEvent'
+  app_server: no visible global function definition for 'modalDialog'
+  app_server: no visible binding for global variable 'datasettype'
+  app_server: no visible binding for global variable 'age_range_young'
+  app_server: no visible binding for global variable '.'
+  app_server : <anonymous>: no visible global function definition for
+    'modalDialog'
+  app_server: no visible global function definition for 'outputOptions'
+  app_server: no visible global function definition for 'req'
+  app_server: no visible global function definition for 'renderUI'
+  app_server: no visible global function definition for 'actionButton'
+  app_server: no visible global function definition for 'reactiveVal'
+  app_server: no visible global function definition for
+    'updateTabsetPanel'
+  app_server: no visible binding for global variable 'value'
+  app_server: no visible binding for global variable 'time'
+  app_server: no visible binding for global variable 'metric'
+  app_server: no visible global function definition for 'all_of'
+  app_server: no visible global function definition for 'renderText'
+  app_server: no visible global function definition for
+    'showNotification'
+  app_server: no visible global function definition for
+    'removeNotification'
+  app_server: no visible global function definition for 'renderImage'
+  app_server: no visible global function definition for 'downloadHandler'
+  app_server : <anonymous>: no visible global function definition for
+    'showNotification'
+  app_server : <anonymous>: no visible global function definition for
+    'removeNotification'
+  app_server : <anonymous>: no visible global function definition for
+    'req'
+  app_server : <anonymous>: no visible binding for global variable 'time'
+  app_server : <anonymous>: no visible global function definition for
+    'stopApp'
   findMapData: no visible global function definition for 'all_of'
   findMapData: no visible global function definition for
     'showNotification'
@@ -70,37 +105,6 @@ saved to temporary directories.
     'imageOutput'
   insertRegionalAnalysis: no visible global function definition for
     'downloadButton'
-  server: no visible global function definition for 'reactive'
-  server: no visible global function definition for 'observeEvent'
-  server: no visible global function definition for 'modalDialog'
-  server: no visible binding for global variable 'datasettype'
-  server: no visible binding for global variable 'age_range_young'
-  server: no visible binding for global variable '.'
-  server : <anonymous>: no visible global function definition for
-    'modalDialog'
-  server: no visible global function definition for 'outputOptions'
-  server: no visible global function definition for 'req'
-  server: no visible global function definition for 'renderUI'
-  server: no visible global function definition for 'actionButton'
-  server: no visible global function definition for 'reactiveVal'
-  server: no visible global function definition for 'updateTabsetPanel'
-  server: no visible binding for global variable 'value'
-  server: no visible binding for global variable 'time'
-  server: no visible binding for global variable 'metric'
-  server: no visible global function definition for 'all_of'
-  server: no visible global function definition for 'renderText'
-  server: no visible global function definition for 'showNotification'
-  server: no visible global function definition for 'removeNotification'
-  server: no visible global function definition for 'renderImage'
-  server: no visible global function definition for 'downloadHandler'
-  server : <anonymous>: no visible global function definition for
-    'showNotification'
-  server : <anonymous>: no visible global function definition for
-    'removeNotification'
-  server : <anonymous>: no visible global function definition for 'req'
-  server : <anonymous>: no visible binding for global variable 'time'
-  server : <anonymous>: no visible global function definition for
-    'stopApp'
   staticHeatmap: no visible binding for global variable 'value'
   staticHeatmap: no visible binding for global variable 'long'
   staticHeatmap: no visible binding for global variable 'lat'
