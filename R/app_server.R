@@ -3,7 +3,7 @@ app_server <- function(input, output, session) {
 # NEOTOMA DATABASE -------------------------------------------------------------
   
   # Facilitate data harmonization in custom findNeotoma() function
-  taxonReplace <- reactive({
+  taxonReplace <- shiny::reactive({
     taxon = input$taxon
     modified_taxon_name = paste0(taxon, ".*")
     return(modified_taxon_name)
@@ -11,7 +11,7 @@ app_server <- function(input, output, session) {
   
   
   # Find and display sites using Neotoma search feature
-  sites <- observeEvent(input$neotomaSearch, {
+  sites <- shiny::observeEvent(input$neotomaSearch, {
     
     # Check to make sure all fields are filled out
     if (is.na(input$xmin) ||
@@ -24,7 +24,7 @@ app_server <- function(input, output, session) {
         is.na(input$yearMin)) {
 
       # Show a modal dialog if any input is missing
-      shiny::showModal(modalDialog(
+      shiny::showModal(shiny::modalDialog(
         title = "Input Error",
         "Please fill out all fields before proceeding.",
         easyClose = TRUE,
@@ -66,7 +66,7 @@ app_server <- function(input, output, session) {
   
           # If no sites are returned, show a modal with a specific message
           if (is.null(al_pollen) || length(al_pollen) == 0) {
-            shiny::showModal(modalDialog(
+            shiny::showModal(shiny::modalDialog(
               title = "No Sites Found",
               "No sites were found for the given coordinates. Try different coordinates.",
               easyClose = TRUE,
@@ -86,7 +86,7 @@ app_server <- function(input, output, session) {
           
           # If there is an error (e.g., connection fails), show a modal with the error message
           }, error = function(e) {
-            shiny::showModal(modalDialog(
+            shiny::showModal(shiny::modalDialog(
               title = "API Connection Error",
               paste("Failed to connect to the Neotoma API. Check your internet connection or try again later."),
               easyClose = TRUE,
@@ -97,7 +97,7 @@ app_server <- function(input, output, session) {
         })
   
         # Download organized file
-        neotomaData <- observeEvent(input$proceed, {
+        neotomaData <- shiny::observeEvent(input$proceed, {
           
           # Define user input
           taxon = input$taxon
@@ -135,15 +135,15 @@ app_server <- function(input, output, session) {
 ## Mechanics -------------------------------------------------------------------  
   
   # Server-side indicator for whether a file has been uploaded
-  output$fileUploaded <- reactive({
+  output$fileUploaded <- shiny::reactive({
     return(!is.null(rawData()))
   })
-  outputOptions(output, "fileUploaded", suspendWhenHidden = FALSE)
+  shiny::outputOptions(output, "fileUploaded", suspendWhenHidden = FALSE)
 
   
   # Reactive expression to read the uploaded file
-  rawData <- reactive({
-    req(input$file1)
+  rawData <- shiny::reactive({
+    shiny::req(input$file1)
     inFile <- input$file1
     rawdata <- utils::read.csv(inFile$datapath, header = TRUE, sep = ",", quote = '"', check.names = FALSE)
     return(rawdata)
@@ -151,9 +151,9 @@ app_server <- function(input, output, session) {
 
   
   # Dynamically show the "Analyze" button once a file is uploaded
-  output$analyze_btn_ui <- renderUI({
+  output$analyze_btn_ui <- shiny::renderUI({
     if (!is.null(input$file1)) {
-      actionButton("analyze_btn", "Analyze")
+      shiny::actionButton("analyze_btn", "Analyze")
     }
   })
   
@@ -162,11 +162,11 @@ app_server <- function(input, output, session) {
 ## Insert REGIONAL ANALYSIS tab ------------------------------------------------
   
   # Default to being absent
-  tab_inserted <- reactiveVal(FALSE)
+  tab_inserted <- shiny::reactiveVal(FALSE)
   
   
   # Dynamically insert REGIONAL ANALYSIS tab when "Analyze" button pressed
-  observeEvent(input$analyze_btn, {
+  shiny::observeEvent(input$analyze_btn, {
     if (!tab_inserted()) {
       
       # Use UI template in InsertRegionalAnalysis.R
@@ -175,7 +175,7 @@ app_server <- function(input, output, session) {
       }
     
     # Automatically switch to the newly inserted "Analysis" tab
-    updateTabsetPanel(session, "main_tabs", selected = paste("Regional Analysis"))
+    shiny::updateTabsetPanel(session, "main_tabs", selected = paste("Regional Analysis"))
     })
 
 
@@ -183,7 +183,7 @@ app_server <- function(input, output, session) {
 # DATA ORGANIZATION ------------------------------------------------------------
   
   # Reactive expression to transform the data
-  transformedData <- reactive({
+  transformedData <- shiny::reactive({
     data = rawData()
     
     # Custom function from DataOrganization.R that arranges data for plotting
@@ -192,9 +192,9 @@ app_server <- function(input, output, session) {
   
   
   # Reactive expression to transform the data
-  mapData <- reactive({
+  mapData <- shiny::reactive({
     mapdata <- rawData()
-    req(mapdata)
+    shiny::req(mapdata)
     
     # Custom function from DataOrganization.R to transform data into a format that can be used for animations
     findMapData(mapdata)
@@ -202,7 +202,7 @@ app_server <- function(input, output, session) {
   
   
   # Automatically draw bounding box with 10% margin around the datapoints
-  expandedBBox <- reactive({
+  expandedBBox <- shiny::reactive({
     map_data <- mapData()
     
     # Custom function in DataOrganization.R that automatically finds bounding box from coordinates on datasheet
@@ -212,7 +212,7 @@ app_server <- function(input, output, session) {
   
   
   # Further modify the bounding box so it can be placed on map
-  expandedBBoxsfc <- reactive({
+  expandedBBoxsfc <- shiny::reactive({
     expanded_bbox_sfc <- sf::st_as_sfc(expandedBBox())
     return(expanded_bbox_sfc)
   })
@@ -225,7 +225,7 @@ app_server <- function(input, output, session) {
   
   # Render interactive pplot with plotly package
   output$dataPlot <- plotly::renderPlotly({
-    req(transformedData())
+    shiny::req(transformedData())
     summary_long <- transformedData()
 
     # Create static plot with ggplot2
@@ -248,7 +248,7 @@ app_server <- function(input, output, session) {
 ## Temporal Monte Carlo --------------------------------------------------------
   
   # Calculate spatial Monte Carlo test upon pressing button
-  observeEvent(input$calcButton, {
+  shiny::observeEvent(input$calcButton, {
     
     # Check all fields are filled out
     if (is.na(input$entry) ||
@@ -257,7 +257,7 @@ app_server <- function(input, output, session) {
         is.na(input$nit)) {
 
       # If not, show a modal dialog if any input is missing
-      shiny::showModal(modalDialog(
+      shiny::showModal(shiny::modalDialog(
         title = "Input Error",
         "Please fill out all fields before proceeding.",
         easyClose = TRUE,
@@ -278,7 +278,7 @@ app_server <- function(input, output, session) {
         existing_columns = colnames(rawData)
         columns_to_remove = dplyr::intersect(existing_columns, unwanted_columns)
         rawData <- rawData %>%
-          dplyr::select(-all_of(columns_to_remove))
+          dplyr::select(-tidyr::all_of(columns_to_remove))
   
         # Custom function from DataOrganization.R file that summarizes number of localities with data and those with pollen for each time bin
         summary = summarizeData(rawData)
@@ -288,7 +288,7 @@ app_server <- function(input, output, session) {
   
         # Calculate realized p-value and display on ui
         result = score/nit
-        output$calcResult <- renderText({
+        output$calcResult <- shiny::renderText({
           paste("The result of the calculation is:", result)
         })
         } 
@@ -299,24 +299,24 @@ app_server <- function(input, output, session) {
 ## Display static animations ---------------------------------------------------
   
   # Reactive value to hold temporary path for GIF 
-  gif_path <- reactiveVal(NULL)
+  gif_path <- shiny::reactiveVal(NULL)
   
   
   # Generate animation upon pressing "Analyze" button
-  observeEvent(input$analyze_btn, {
+  shiny::observeEvent(input$analyze_btn, {
     
     # Download notification
-    rendering_notification <- showNotification("Your animation is rendering. This may take a minute.", 
+    rendering_notification <- shiny::showNotification("Your animation is rendering. This may take a minute.", 
                                               type = "message", duration = NULL,
                                               closeButton = FALSE)
     
     # Remove notification upon completion
     on.exit({
-      removeNotification(rendering_notification)
+      shiny::removeNotification(rendering_notification)
     })
     
     # Define necessary inputs
-    req(expandedBBoxsfc())
+    shiny::req(expandedBBoxsfc())
     map_data <- mapData()
     expanded_bbox <- expandedBBox()
     expanded_bbox_sfc <- expandedBBoxsfc()
@@ -347,10 +347,10 @@ app_server <- function(input, output, session) {
 
   
   # Display GIF
-  output$static_animation <- renderImage({
+  output$static_animation <- shiny::renderImage({
     
     # Only display after animation rendered
-    req(gif_path)
+    shiny::req(gif_path)
     
     # Image specs
     list(
@@ -366,7 +366,7 @@ app_server <- function(input, output, session) {
 ## Download Animation ----------------------------------------------------------
   
   # Begin downloading when button pressed
-  output$downloadAnimation <- downloadHandler(
+  output$downloadAnimation <- shiny::downloadHandler(
     filename = function() {
       
       # Default filename
@@ -375,17 +375,17 @@ app_server <- function(input, output, session) {
     content = function(file) {
       
       # Download notification
-      download_notification <- showNotification("Your animation is downloading. This may take a minute.", 
+      download_notification <- shiny::showNotification("Your animation is downloading. This may take a minute.", 
                                                 type = "message", duration = NULL,
                                                 closeButton = FALSE)
       
       # Remove notification upon download
       on.exit({
-        removeNotification(download_notification)
+        shiny::removeNotification(download_notification)
       })
 
       # Define necessary inputs
-      req(expandedBBoxsfc())
+      shiny::req(expandedBBoxsfc())
       map_data <- mapData()
       expanded_bbox <- expandedBBox()
       expanded_bbox_sfc <- expandedBBoxsfc()
@@ -413,6 +413,6 @@ app_server <- function(input, output, session) {
 # CLOSE APPLICATION ------------------------------------------------------------
   
   session$onSessionEnded(function() {
-    stopApp()
+    shiny::stopApp()
   })
   }
