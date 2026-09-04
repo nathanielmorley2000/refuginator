@@ -13,7 +13,7 @@
 
 
 launchRefuginator <- function(defaultbrowser = TRUE) {
-  appDir <- system.file("ShinyApp/", package = "refuginator")
+  appDir <- system.file("R/ShinyApp/", package = "refuginator")
   if (appDir == "") {
     stop("Could not find shinyApp. Try re-installing `refuginator`.", call. = FALSE)
   }
