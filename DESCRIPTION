@@ -12,16 +12,15 @@ Imports:
     dplyr,
     gganimate,
     ggplot2,
-    gifski,
     leaflet,
     neotoma2,
     plotly,
-    rnaturalearth,
-    rnaturalearthdata,
+    scales,
     sf,
     shiny,
     shinycssloaders,
     shinyjs,
+    stringr,
     tidyr,
     viridis
 RoxygenNote: 7.3.3
