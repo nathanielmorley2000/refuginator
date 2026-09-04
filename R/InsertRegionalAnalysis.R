@@ -1,34 +1,34 @@
 insertRegionalAnalysis <- function() {
   
   # Dynamically insert new REGIONAL ANALYSIS tab
-  insertTab(inputId = "main_tabs",
-            tabPanel("Regional Analysis",
+  shiny::insertTab(inputId = "main_tabs",
+            shiny::tabPanel("Regional Analysis",
                      value = paste("Regional Analysis"),
-                     sidebarLayout(
+                     shiny::sidebarLayout(
                        
                        # Sidebar panel for Monte Carlo inputs
-                       sidebarPanel(
-                         h2("Monte Carlo Analysis"),
-                         tags$div(style = "height: 10px;"),
-                         numericInput("entry", "Entry Presence", value = 9),
-                         numericInput("decline", "Decline Presence", value = 5),
-                         numericInput("duration", "Duration of Decline (Number of Time Bins)", value = 1),
-                         numericInput("nit", "Number of Iterations", value = 10000),
-                         actionButton("calcButton", "Calculate"),
-                         tags$hr(),
-                         h4("Realized p-value:"),
-                         verbatimTextOutput("calcResult")
+                       shiny::sidebarPanel(
+                         shiny::tags$h2("Monte Carlo Analysis"),
+                         shiny::tags$div(style = "height: 10px;"),
+                         shiny::numericInput("entry", "Entry Presence", value = 9),
+                         shiny::numericInput("decline", "Decline Presence", value = 5),
+                         shiny::numericInput("duration", "Duration of Decline (Number of Time Bins)", value = 1),
+                         shiny::numericInput("nit", "Number of Iterations", value = 10000),
+                         shiny::actionButton("calcButton", "Calculate"),
+                         shiny::tags$hr(),
+                         shiny::tags$h4("Realized p-value:"),
+                         shiny::verbatimTextOutput("calcResult")
                        ),
                        
                        # Main panel for displaying outputs
-                       mainPanel(
-                         h2("Regional Presence Plot"),
+                       shiny::mainPanel(
+                         shiny::tags$h2("Regional Presence Plot"),
                          shinycssloaders::withSpinner(plotly::plotlyOutput("dataPlot"), type = 6),
-                         tags$hr(),
-                         h2("Animated Heat Map"),
-                         imageOutput("static_animation"),
-                         tags$hr(),
-                         downloadButton("downloadAnimation", "Download Animation")
+                         shiny::tags$hr(),
+                         shiny::tags$h2("Animated Heat Map"),
+                         shiny::imageOutput("static_animation"),
+                         shiny::tags$hr(),
+                         shiny::downloadButton("downloadAnimation", "Download Animation")
                        ))),
             
             # Place new tab after UPLOAD DATA
