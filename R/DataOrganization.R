@@ -6,7 +6,7 @@ summarizeData <- function(data, control) {
   # Transform data
   data = data %>%
     dplyr::select(!c("lat", "long")) %>%
-    tidyr::pivot_longer(cols = -sitename, names_to = "time", values_to = "abundance")  # Replace COLUMN_NAME with actual column name
+    tidyr::pivot_longer(cols = -.data$sitename, names_to = "time", values_to = "abundance")  # Replace COLUMN_NAME with actual column name
   
   # Capture warnings during the mutate() step
   tryCatch({
@@ -14,17 +14,17 @@ summarizeData <- function(data, control) {
       
       # Handle rows where COLUMN_NAME could not be converted to numeric
       data = data %>%
-        dplyr::group_by(time) %>%
+        dplyr::group_by(.data$time) %>%
         dplyr::summarize(
-          localities_with_data = sum(!is.na(abundance)),
-          localities_with_pollen = sum(abundance > 0, na.rm = TRUE)
+          localities_with_data = sum(!is.na(.data$abundance)),
+          localities_with_pollen = sum(.data$abundance > 0, na.rm = TRUE)
         ) %>%
         dplyr::mutate(
-          time = as.numeric(time),
-          localities_with_data = as.numeric(localities_with_data),
-          localities_with_pollen = as.numeric(localities_with_pollen)
+          time = as.numeric(.data$time),
+          localities_with_data = as.numeric(.data$localities_with_data),
+          localities_with_pollen = as.numeric(.data$localities_with_pollen)
         ) %>%
-        dplyr::arrange(time)
+        dplyr::arrange(.data$time)
       return(data)
     
       # Throw error message if extra columns are messing up calculations
@@ -81,7 +81,7 @@ transformData <- function(data) {
       
       # Pivot to a long table that can be used for graphing
       data = data %>%
-        tidyr::pivot_longer(cols = c(localities_with_data, localities_with_pollen),
+        tidyr::pivot_longer(cols = c(.data$localities_with_data, .data$localities_with_pollen),
                             names_to = "metric", values_to = "value")
       return(data)
     
@@ -125,10 +125,10 @@ findMapData <- function(mapdata) {
     tidyr::pivot_longer(cols = tidyr::all_of(time_cols),
                         names_to = "time", values_to =
                           "value") %>%
-    tidyr::drop_na(value) %>%
-    dplyr::mutate(time = as.numeric(as.character(time))) %>%
-    dplyr::mutate(time = factor(time, levels = sort(unique(time)))) %>%
-    dplyr::mutate(value = as.numeric(value))
+    tidyr::drop_na(.data$value) %>%
+    dplyr::mutate(time = as.numeric(as.character(.data$time))) %>%
+    dplyr::mutate(time = factor(.data$time, levels = sort(unique(.data$time)))) %>%
+    dplyr::mutate(value = as.numeric(.data$value))
 
   return(mapdata)
   }

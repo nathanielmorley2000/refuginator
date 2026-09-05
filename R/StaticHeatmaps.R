@@ -2,7 +2,7 @@ staticHeatmap <- function(map_data, expanded_bbox, expanded_bbox_sfc, countries,
   
   # Organize map_data so lowest values plotted under highest values
   map_data <- map_data %>%
-    dplyr::arrange(value)
+    dplyr::arrange(.data$value)
   
   # Create base map
   base_map <- ggplot2::ggplot() +
@@ -17,7 +17,7 @@ staticHeatmap <- function(map_data, expanded_bbox, expanded_bbox_sfc, countries,
   
   # Plot data onto base map with black points being n=0 and coloured points reflecting number of grains >1
   map_with_data <- base_map +
-    ggplot2::geom_point(data = map_data, ggplot2::aes(x = long, y = lat, fill = value, group = time), shape = 21, size = 10) +
+    ggplot2::geom_point(data = map_data, ggplot2::aes(x = .data$long, y = .data$lat, fill = .data$value, group = .data$time), shape = 21, size = 10) +
     ggplot2::scale_size_continuous(guide = 'none') +
     
     # Set up a dual color scale: 0 values as white, others with viridis gradient
@@ -31,7 +31,7 @@ staticHeatmap <- function(map_data, expanded_bbox, expanded_bbox_sfc, countries,
   
   # Animate the map through time
   map_with_animation <- map_with_data +
-    gganimate::transition_time(-time) +
+    gganimate::transition_time(-.data$time) +
     ggplot2::ggtitle('Year: {frame_time}',
                      subtitle = 'Frame {frame} of {nframes}')
 

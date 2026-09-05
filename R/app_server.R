@@ -62,7 +62,7 @@ app_server <- function(input, output, session) {
           # Get datasets and filter to only include pollen data
           al_datasets = neotoma2::get_datasets(al_sites, all_data = TRUE)
           al_pollen = al_datasets %>%
-            neotoma2::filter(datasettype == "pollen" & !is.na(age_range_young))
+            neotoma2::filter(.data$datasettype == "pollen" & !is.na(.data$age_range_young))
   
           # If no sites are returned, show a modal with a specific message
           if (is.null(al_pollen) || length(al_pollen) == 0) {
@@ -79,8 +79,7 @@ app_server <- function(input, output, session) {
             } else {
               output$sitePreview <- leaflet::renderLeaflet({
                 neotoma2::plotLeaflet(al_pollen) %>%
-                  leaflet::addPolygons(map = .,
-                                       data = bbox_polygon,
+                  leaflet::addPolygons(data = bbox_polygon,
                                        color = "green") })
               }
           
@@ -229,7 +228,7 @@ app_server <- function(input, output, session) {
     summary_long <- transformedData()
 
     # Create static plot with ggplot2
-    p <- ggplot2:: ggplot(summary_long, ggplot2::aes(x = value, y = time, color = metric)) +
+    p <- ggplot2:: ggplot(summary_long, ggplot2::aes(x = .data$value, y = .data$time, color = .data$metric)) +
       ggplot2::geom_path(linewidth = 1) +
       ggplot2::labs(title = "Localities Data Over Time",
            x = "Number of localities",
@@ -323,7 +322,7 @@ app_server <- function(input, output, session) {
     
     # Sort time bins
     map_data <- map_data %>%
-      dplyr::mutate(time = as.numeric(as.character(time)))
+      dplyr::mutate(time = as.numeric(as.character(.data$time)))
     timebins <- sort(unique(map_data$time))
     
     # Create static heatmap animation using StaticHeatmaps.R
@@ -392,7 +391,7 @@ app_server <- function(input, output, session) {
       
       # Sort time bins
       map_data <- map_data %>%
-        dplyr::mutate(time = as.numeric(as.character(time)))
+        dplyr::mutate(time = as.numeric(as.character(.data$time)))
       timebins <- sort(unique(map_data$time))
 
       # Create static heatmap animation using StaticHeatmaps.R
