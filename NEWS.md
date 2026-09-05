@@ -1,5 +1,8 @@
 # refuginator 1.0.1
 
+* Made back-end changes to comply with CRAN policies.
+
+
 # refuginator 1.0.0
 
 * Initial CRAN submission.
