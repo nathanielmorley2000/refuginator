@@ -2,3 +2,4 @@
 
 export(launchRefuginator)
 importFrom(dplyr,"%>%")
+importFrom(rlang,.data)

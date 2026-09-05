@@ -15,6 +15,7 @@ Imports:
     leaflet,
     neotoma2,
     plotly,
+    rlang,
     rnaturalearth,
     rnaturalearthdata,
     scales,

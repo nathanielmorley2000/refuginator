@@ -4,6 +4,7 @@
 #'
 #' @return Launches Refuginator application in your browser. All features are contained within the application. Read the "refuginatorIntro" vignette for a guide to the features.
 #' @importFrom dplyr %>%
+#' @importFrom rlang .data
 #' @export
 #'
 #' @examples 
