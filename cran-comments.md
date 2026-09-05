@@ -1,5 +1,22 @@
-## Resubmission
-This is a resubmission. In this version, I have:
+## Resubmission 2
+This is a resubmission of version 1.0.2, replacing version 1.0.1 which was rejected following automatic checks 
+that identified various issues with visible global function definitions and visible binding for global variables.
+
+### Fixes in this version:
+
+* Double-checked all functions to explicitly call their namespace (e.g., dplyr::mutate()).
+
+* Double-checked any variables in a data-masked context have the prefix .data$.
+
+* Included a WORDLIST file that includes words used in my DESCRIPTION file that previously triggered spellchecks.
+
+
+
+## Resubmission 1
+This is a resubmission of version 1.0.1, replacing version 1.0.0 which was rejected following manual inspection
+due to coding practices that did not comply with CRAN policies.
+
+### Fixes in this version:
 
 * Put 'shiny' in single quotations in the description field of the DESCRIPTION file.
 
@@ -19,127 +36,14 @@ saved to temporary directories.
 
 * This is a new release.
 
-
 *  checking dependencies in R code ... NOTE
   Namespaces in Imports field not imported from:
     'rnaturalearth' 'rnaturalearthdata'
     All declared Imports should be used.
     
-    A function from 'rnaturalearth' is used on line 103 of R/DataOrganization.R and must have
+    A function from 'rnaturalearth' is used on line 100 of R/DataOrganization.R and must have
     been missed by the check. 'rnaturalearthdata' is a helper package for 'rnaturalearth'.
     
-    
-* checking R code for possible problems ... NOTE
-  app_server: no visible global function definition for 'reactive'
-  app_server: no visible global function definition for 'observeEvent'
-  app_server: no visible global function definition for 'modalDialog'
-  app_server: no visible binding for global variable 'datasettype'
-  app_server: no visible binding for global variable 'age_range_young'
-  app_server: no visible binding for global variable '.'
-  app_server : <anonymous>: no visible global function definition for
-    'modalDialog'
-  app_server: no visible global function definition for 'outputOptions'
-  app_server: no visible global function definition for 'req'
-  app_server: no visible global function definition for 'renderUI'
-  app_server: no visible global function definition for 'actionButton'
-  app_server: no visible global function definition for 'reactiveVal'
-  app_server: no visible global function definition for
-    'updateTabsetPanel'
-  app_server: no visible binding for global variable 'value'
-  app_server: no visible binding for global variable 'time'
-  app_server: no visible binding for global variable 'metric'
-  app_server: no visible global function definition for 'all_of'
-  app_server: no visible global function definition for 'renderText'
-  app_server: no visible global function definition for
-    'showNotification'
-  app_server: no visible global function definition for
-    'removeNotification'
-  app_server: no visible global function definition for 'renderImage'
-  app_server: no visible global function definition for 'downloadHandler'
-  app_server : <anonymous>: no visible global function definition for
-    'showNotification'
-  app_server : <anonymous>: no visible global function definition for
-    'removeNotification'
-  app_server : <anonymous>: no visible global function definition for
-    'req'
-  app_server : <anonymous>: no visible binding for global variable 'time'
-  app_server : <anonymous>: no visible global function definition for
-    'stopApp'
-  findMapData: no visible global function definition for 'all_of'
-  findMapData: no visible global function definition for
-    'showNotification'
-  findMapData: no visible binding for global variable 'value'
-  findMapData: no visible binding for global variable 'time'
-  findNeotoma: no visible binding for global variable 'ecologicalgroup'
-  findNeotoma: no visible binding for global variable 'variablename'
-  findNeotoma: no visible binding for global variable 'sitename'
-  findNeotoma: no visible binding for global variable 'lat'
-  findNeotoma: no visible binding for global variable 'long'
-  findNeotoma: no visible binding for global variable 'siteid'
-  findNeotoma: no visible binding for global variable 'datasetid'
-  findNeotoma: no visible binding for global variable 'age'
-  findNeotoma: no visible binding for global variable 'value'
-  findNeotoma: no visible binding for global variable '.'
-  findNeotoma: no visible binding for global variable 'Year_Bin'
-  findNeotoma: no visible global function definition for 'all_of'
-  insertRegionalAnalysis: no visible global function definition for
-    'insertTab'
-  insertRegionalAnalysis: no visible global function definition for
-    'tabPanel'
-  insertRegionalAnalysis: no visible global function definition for
-    'sidebarLayout'
-  insertRegionalAnalysis: no visible global function definition for
-    'sidebarPanel'
-  insertRegionalAnalysis: no visible global function definition for 'h2'
-  insertRegionalAnalysis: no visible binding for global variable 'tags'
-  insertRegionalAnalysis: no visible global function definition for
-    'numericInput'
-  insertRegionalAnalysis: no visible global function definition for
-    'actionButton'
-  insertRegionalAnalysis: no visible global function definition for 'h4'
-  insertRegionalAnalysis: no visible global function definition for
-    'verbatimTextOutput'
-  insertRegionalAnalysis: no visible global function definition for
-    'mainPanel'
-  insertRegionalAnalysis: no visible global function definition for
-    'imageOutput'
-  insertRegionalAnalysis: no visible global function definition for
-    'downloadButton'
-  staticHeatmap: no visible binding for global variable 'value'
-  staticHeatmap: no visible binding for global variable 'long'
-  staticHeatmap: no visible binding for global variable 'lat'
-  staticHeatmap: no visible binding for global variable 'time'
-  summarizeData: no visible binding for global variable 'sitename'
-  summarizeData: no visible binding for global variable 'time'
-  summarizeData: no visible binding for global variable 'abundance'
-  summarizeData: no visible binding for global variable
-    'localities_with_data'
-  summarizeData: no visible binding for global variable
-    'localities_with_pollen'
-  summarizeData : <anonymous>: no visible global function definition for
-    'modalDialog'
-  transformData: no visible global function definition for 'all_of'
-  transformData: no visible global function definition for 'modalDialog'
-  transformData: no visible binding for global variable
-    'localities_with_data'
-  transformData: no visible binding for global variable
-    'localities_with_pollen'
-  Undefined global functions or variables:
-    . Year_Bin abundance actionButton age age_range_young all_of
-    datasetid datasettype downloadButton downloadHandler ecologicalgroup
-    h2 h4 imageOutput insertTab lat localities_with_data
-    localities_with_pollen long mainPanel metric modalDialog numericInput
-    observeEvent outputOptions reactive reactiveVal removeNotification
-    renderImage renderText renderUI req showNotification sidebarLayout
-    sidebarPanel siteid sitename stopApp tabPanel tags time
-    updateTabsetPanel value variablename verbatimTextOutput
-  Consider adding
-    importFrom("stats", "time")
-  to your NAMESPACE file.
-
-  All of these functions are used in a 'shiny' application, so they are not defined in
-  the global environment.
-
 
 
 ## revdepcheck results
