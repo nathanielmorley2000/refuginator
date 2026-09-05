@@ -1,3 +1,8 @@
+# refuginator 1.0.2
+
+* Fixed CRAN automated check issues
+
+
 # refuginator 1.0.1
 
 * Made back-end changes to comply with CRAN policies.
