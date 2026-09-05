@@ -13,11 +13,11 @@ app_ui <- function() {
     # App title bar
     shiny::titlePanel(shiny::h1("Refuginator",
                                 style={'background-color: #000000;
-  margin-top: -20px;
-  margin-left: -15px;
-  margin-right: -15px;
-  padding-left: 20px;
-	color: #ffffff;'})),
+                                margin-top: -20px;
+                                margin-left: -15px;
+                                margin-right: -15px;
+                                padding-left: 20px;
+                                  color: #ffffff;'})),
     
     
     # Custom CSS using inline style to increase margins
